@@ -1,0 +1,56 @@
+@startuml
+left to right direction
+'skinparam linetype ortho
+'skinparam Padding 20
+actor "Ректор" as rector
+actor "Событие запуска\n клиент. приложения \nРСПК" as timer
+actor "Отв. секретарь\n приемной комиссии" as ospk
+actor "Рядовой сотрудник\n приемной комиссии" as rspk
+
+rectangle "Целевая система"{
+	together {
+		usecase "Подача сигналов о начале ПК,\n завершении ПК\n и подготовке к новой ПК" as uc1
+		usecase "Просмотр статистики ПК" as uc5
+		usecase "Просм. инф. по мин. доп. баллам ЕГЭ,\n напр. подг-и, обр. прог-м и межд. дог-м" as uc4
+		usecase "Блокир. абитуриента при выявлении факта предоставления \n заведомо подложных документов" as uc7
+		usecase "Получение списка абитуриентов,\n рекомендованных к зачислению" as uc_list
+		usecase "Ежедневное составление\n рейтинга абитуриентов" as uc12
+	}
+	
+		usecase "Рег. абитуриентов\n\n\n" as uc8	
+		usecase "Рег. заявлений" as uc9
+		usecase "Удаление инф. об абит. по его просьбе" as del_abit
+		usecase "Рег. согл. на зачисл." as uc11
+		usecase "Редактирование инф.\n об абитуриенте" as uc_edit
+		usecase "Редакт. инф. по мин. доп. баллам ЕГЭ,\n напр. подг-и, обр. прог-м и межд. дог-м" as uc6
+	
+}
+'Регулярное выражение для переворота
+'([a-z].+)\s--\s([a-z].+)
+
+'Чем больше знаков "-"
+'Тем длиннее линия
+uc12 --- timer
+uc1 --- rector
+uc4 --- rector
+uc5 --- rector
+uc_list --- rector
+
+ospk -- uc4
+ospk -- uc5
+ospk -- uc6
+ospk -- uc7
+rspk -- uc8
+rspk -- uc9
+rspk -- del_abit
+rspk -- uc11
+rspk -- uc_edit
+
+'Отношения между прецедентами
+uc6 .r.> uc4 : <<include>>
+uc8 ..> uc9 : <<include>>
+del_abit ..> uc8 : <<extends>>
+uc11 ..>uc9 : <<extends>>
+uc_edit ..>uc8: <<extends>>
+
+@enduml

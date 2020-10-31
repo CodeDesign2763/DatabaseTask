@@ -1,0 +1,331 @@
+@startuml
+skinparam linetype ortho
+entity Branch {
+	  * ID: smallserial
+	  --
+	  * Name: varchar[150]
+}
+entity Faculty {
+	  * ID: smallserial
+	  --
+	  * ID_Branch: smallint <<FK>>
+	  * Name: varchar[150]
+}
+
+entity Faculty2EducationalProgram {
+	  * ID_Faculty: smallint <<FK>>
+	  * ID_EducationalProgram: integer <<FK>>
+	  --
+}
+entity Quota {
+	* ID: serial
+	--
+	* ID_Faculty: smallint <<FK>>
+	* ID_EducationalProgram: integer <<FK>>
+	* NumberOfStudents: smallint
+	* QuotaType: TypeOfQuota
+}
+entity NumberOfPlaces {
+	* ID: serial
+	--
+	* ID_Faculty: smallint <<FK>>
+	* ID_EducationalProgram: integer <<FK>>
+	* ID_PaymentMethod: integer <<FK>>
+	* NumberOfPlaces: smallint
+}
+
+entity Price {
+	* ID: serial
+	--
+	* ID_Faculty: smallint <<FK>>
+	* ID_EducationalProgram: integer <<FK>>
+	* Price: money
+}
+entity TypeOfEducation {
+	  * ID: smallserial
+	  --
+	  * TrainingPeriod: real
+	  * Name: varchar[50]
+}
+entity EducationalProgram {
+	  * ID: serial
+	  --
+	  * ID_FormOfEducation: smallint <<FK>>
+	  * Speciality_Code: char[10] <<FK>>
+}
+entity PaymentMethod {
+	  * ID: smallserial
+	  --
+	  * PaymentMethodType: TypeOfPaymentMethod
+}
+
+
+entity Speciality {
+	* Speciality_Code: char[10]
+	--
+	* Subject_VIPS: integer <<FK>>
+	* Name: varchar[200]
+}
+
+
+
+'entity Enrollee {
+	'* ID: serial
+	'--
+	'* Name: varchar[100]
+	'* DOB: date
+	'* EducationalDocument: DocumentOfEducation
+	'* AchievementPoints: smallint
+	'* RightToSpecialQuota: boolean
+	'* AgreementOnTargetTraining: boolean
+	'* RightToPriorityAdmission: boolean
+	'* Disabled: boolean
+	'* Compatriot: boolean
+'}
+
+
+
+
+
+
+'entity Application {
+	'* ID: serial
+	'--
+	'* ID_Faculty: smallint <<FK>>
+	'* ID_PaymentMethod: smallint <<FK>>
+	'* ID_Quota: integer <<FK>>
+	'* ID_EducationalProgram: integer <<FK>>
+	'* ID_Enrollee: integer <<FK>>
+'}
+
+'Branch ||-up-|{ Faculty
+'Faculty ||-right-|{ Faculty2EducationalProgram
+'Faculty2EducationalProgram }|-right-|| EducationalProgram
+'EducationalProgram ||-up-|{  PaymentMethod2EducationalProgram
+'PaymentMethod2EducationalProgram }|-left-|| PaymentMethod
+'Quota }|--|| EducationalProgram
+
+Branch ||--|{ Faculty
+Faculty ||--|{ Faculty2EducationalProgram
+NumberOfPlaces }|--|| Faculty
+Faculty }o-down-|| Quota
+Faculty ||--o{ Price
+Faculty2EducationalProgram }|--|| EducationalProgram
+EducationalProgram ||--|{  NumberOfPlaces
+NumberOfPlaces }o--|| PaymentMethod
+
+Quota }|--|| EducationalProgram
+
+EducationalProgram }|--|| TypeOfEducation
+EducationalProgram }|--|| Speciality
+
+EducationalProgram ||--o{ Price
+
+
+newpage
+skinparam linetype ortho
+entity Speciality {
+	* Speciality_Code: char[10]
+	--
+	* Subject_VIPS: integer <<FK>>
+	* Name: varchar[200]
+}
+entity Subject2SpecialityEGE {
+	* Speciality_Code: char[10] <<FK>>
+	* IDSubject: integer <<FK>>
+	--
+}
+entity Subject {
+	* ID: serial
+	--
+	* Name: varchar[80]
+	* MinimumEGEScore: smallint 
+}
+
+'normalized
+entity BenefitsForTheWinners {
+	* ID: smalllserial
+	--
+	* BenefitCode: smallint
+	* MinimumEGEScore: smallint
+}
+
+entity Olympiad {
+	* ID: serial
+	--
+	* Name: varchar[150]
+	* IDBenefits: smallint <<FK>>
+}
+entity OlympiadCertificate {
+	* ID: serial
+	--
+	* ID_Olympiad: integer <<FK>>
+	* IDSubject: integer <<FK>>
+}
+entity OlympiadCertificate2Speciality {
+	* ID_OlympiadCertificate: integer <<FK>>
+	* Speciality_Code: char[10] <<FK>>
+	--
+}
+
+entity EducationalProgram {
+	  * ID: serial
+	  --
+	  * ID_FormOfEducation: smallint <<FK>>
+	  * Speciality_Code: char[10] <<FK>>
+}
+
+BenefitsForTheWinners ||-left-|{ Olympiad
+Olympiad ||--o{ OlympiadCertificate
+'	
+EducationalProgram }|--|| Speciality
+Speciality }|-left-|| "В.И.П.С." Subject
+Subject ||--|{ Subject2SpecialityEGE
+Subject2SpecialityEGE }|--|| Speciality
+OlympiadCertificate ||--|{ OlympiadCertificate2Speciality
+OlympiadCertificate2Speciality }|--||  Speciality
+'OlympiadCertificate }|--|| Subject
+
+newpage
+skinparam linetype ortho
+entity Enrollee {
+	* ID: serial
+	--
+	* Name: varchar[100]
+	* DOB: date
+	* EducationalDocument: DocumentOfEducation
+	* AchievementPoints: smallint
+	* RightToSpecialQuota: boolean
+	* AgreementOnTargetTraining: boolean
+	* RightToPriorityAdmission: boolean
+	* Disabled: boolean
+	* Compatriot: boolean
+}
+
+entity ReceivedCertificate {
+	* ID_Enrollee: integer <<FK>>
+	* ID_OlympiadCertificate: integer <<FK>>
+	--
+	* DateOfReceiving: date
+}
+entity OlympiadCertificate {
+	* ID: serial
+	--
+	* ID_Olympiad: integer <<FK>>
+	* IDSubject: integer <<FK>>
+}
+entity PassedEGE {
+	* ID: serial
+	--
+	* ID_Enrollee: integer <<FK>>
+	* ID_Subject: integer <<FK>>
+	* DateOfExam: date
+	* Score: smallint
+}
+entity Subject {
+	* ID: serial
+	--
+	* Name: varchar[80]
+	* MinimumEGEScore: smallint 
+}
+entity PassedVIPS {
+	* ID: serial
+	--
+	* ID_Enrollee: integer <<FK>>
+	* ID_Subject: integer <<FK>>
+	* Score: smallint
+}
+entity Citizenship {
+	* ID: smallserial
+	--
+	* Name: varchar[100]
+	* AgreementWithRF: boolean
+}
+
+entity Enrollee2Citizenship {
+	* ID_Enrollee: integer <<FK>>
+	* ID_Citizenship: integer <<FK>>
+	--
+}
+
+Enrollee ||--o{ ReceivedCertificate
+ReceivedCertificate }|--o| OlympiadCertificate
+Enrollee ||--o{ PassedEGE
+PassedEGE }o--|| Subject
+Enrollee ||--o{ PassedVIPS
+PassedVIPS }o--|| Subject
+Enrollee ||--|{ Enrollee2Citizenship
+Enrollee2Citizenship }|--|| Citizenship
+newpage
+skinparam linetype ortho
+entity Enrollee {
+	* ID: serial
+	--
+	* Name: varchar[100]
+	* DOB: date
+	* EducationalDocument: DocumentOfEducation
+	* AchievementPoints: smallint
+	* RightToSpecialQuota: boolean
+	* AgreementOnTargetTraining: boolean
+	* RightToPriorityAdmission: boolean
+	* Disabled: boolean
+	* Compatriot: boolean
+}
+entity Application {
+	* ID: serial
+	--
+	* ID_Faculty: smallint <<FK>>
+	* ID_PaymentMethod: smallint <<FK>>
+	* ID_Quota: integer <<FK>>
+	* ID_EducationalProgram: integer <<FK>>
+	* ID_Enrollee: integer <<FK>>
+	* EnrolmentConsent: boolean
+}
+entity EducationalProgram {
+	  * ID: serial
+	  --
+	  * ID_FormOfEducation: smallint <<FK>>
+	  * Speciality_Code: char[10] <<FK>>
+}
+entity PaymentMethod {
+	  * ID: smallserial
+	  --
+	  * PaymentMethodType: TypeOfPaymentMethod
+}
+entity Faculty {
+	  * ID: smallserial
+	  --
+	  * ID_Branch: smallint <<FK>>
+	  * Name: varchar[150]
+}
+entity Quota {
+	* ID: serial
+	--
+	* ID_Faculty: smallint <<FK>>
+	* ID_EducationalProgram: integer <<FK>>
+	* NumberOfStudents: smallint
+	* QuotaType: TypeOfQuota
+}
+Enrollee ||--|{ Application 
+Application }|-left--|| EducationalProgram
+Application }|-right-|| PaymentMethod
+Application }|--|| Faculty
+Application }o--o| Quota
+
+newpage
+entity User {
+	* ID: serial
+	--
+	* ID_Role: smallint <<FK>>
+	* Login: varchar[50]
+	* Password: varchar[200]
+}
+entity Role {
+	* ID: smallserial
+	--
+	* Name: varchar[200]
+}	
+User }o--|| Role
+@enduml
+
+@enduml
