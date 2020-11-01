@@ -15,7 +15,7 @@ def gen_name():
 #Функция для генерации дат
 def gen_dob(m1,y1,m2,y2):
 	day=random.randint(1,28)
-	month=random.randint(m1,m1)
+	month=random.randint(m1,m2)
 	year=random.randint(y1,y2)
 	return str(day)+"."+str(month)+"."+str(year)
 	
