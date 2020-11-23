@@ -63,7 +63,7 @@ entity Speciality {
 
 Faculty ||--|{ PaymentMethod2EducationalProgram
 Branch ||--|{ Faculty
-Faculty }o--|| Quota
+Faculty ||--o{ Quota
 
 EducationalProgram ||--|{  PaymentMethod2EducationalProgram
 PaymentMethod2EducationalProgram }o--|| PaymentMethod
@@ -100,7 +100,7 @@ entity Subject {
 entity BenefitsForTheWinners {
 	* ID: smalllserial
 	--
-	* BenefitCode: smallint
+	* BC: BenefitCode
 	* MinimumEGEScore: smallint
 }
 
