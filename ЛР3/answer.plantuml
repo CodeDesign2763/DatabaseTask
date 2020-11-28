@@ -1,0 +1,36 @@
+@startuml
+skinparam linetype ortho
+left to right direction
+entity Branch {
+	  * ID: smallserial
+	  --
+	  * Name: varchar[150]
+}
+entity Faculty {
+	  * ID: smallserial
+	  --
+	  * ID_Branch: smallint <<FK>>
+	  * Name: varchar[150]
+}
+
+Branch ||--|{ Faculty
+newpage
+
+skinparam linetype ortho
+left to right direction
+entity Branch {
+	  * ID: smallserial
+	  --
+	  * Name: varchar[150]
+}
+entity Faculty {
+	  * ID: smallserial
+	  --
+	  * ID_Branch: smallint <<FK>>
+	  * Name: varchar[150]
+}
+
+Branch ||--o{ Faculty
+	
+@enduml
+

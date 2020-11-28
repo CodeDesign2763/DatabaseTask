@@ -1,0 +1,309 @@
+@startuml
+skinparam linetype ortho
+left to right direction
+entity Branch {
+	  * ID: smallserial
+	  --
+	  * Name: varchar[150]
+}
+entity Faculty {
+	  * ID: smallserial
+	  --
+	  * ID_Branch: smallint <<FK>>
+	  * Name: varchar[150]
+}
+
+entity Quota {
+	* ID: serial
+	--
+	* ID_Faculty: smallint <<FK>>
+	* ID_EducationalProgram: integer <<FK>>
+	* NumberOfStudents: smallint
+	* QuotaType: TypeOfQuota
+}
+entity PaymentMethod2EducationalProgram {
+	* ID: serial
+	--
+	* ID_Faculty: smallint <<FK>>
+	* ID_PaymentMethod: integer <<FK>>
+	* ID_EducationalProgram: integer <<FK>>
+	* Price: money
+	* NumberOfStudents: smallint
+}
+
+entity TypeOfEducation {
+	  * ID: smallserial
+	  --
+	  * TrainingPeriod: real
+	  * Name: varchar[50]
+}
+entity EducationalProgram {
+	  * ID: serial
+	  --
+	  * ID_FormOfEducation: smallint <<FK>>
+	  * Speciality_Code: char[10] <<FK>>
+}
+entity PaymentMethod {
+	  * ID: smallserial
+	  --
+	  * PaymentMethodType: TypeOfPaymentMethod
+}
+
+
+entity Speciality {
+	* Speciality_Code: char[10]
+	--
+	* Subject_VIPS: integer <<FK>>
+	* Name: varchar[200]
+}
+
+'Faculty ||--|{ PaymentMethod2EducationalProgram
+'Branch ||--|{ Faculty
+'Faculty ||--o{ Quota
+
+'EducationalProgram ||--|{  PaymentMethod2EducationalProgram
+'PaymentMethod2EducationalProgram }o--|| PaymentMethod
+
+'Quota }|--|| EducationalProgram
+
+'EducationalProgram }|--|| TypeOfEducation
+'EducationalProgram }|--|| Speciality
+
+
+
+
+
+skinparam linetype ortho
+entity Speciality {
+	* Speciality_Code: char[10]
+	--
+	* Subject_VIPS: integer <<FK>>
+	* Name: varchar[200]
+}
+entity Subject2SpecialityEGE {
+	* Speciality_Code: char[10] <<FK>>
+	* IDSubject: integer <<FK>>
+	--
+}
+entity Subject {
+	* ID: serial
+	--
+	* Name: varchar[80]
+	* MinimumEGEScore: smallint 
+}
+
+entity BenefitsForTheWinners {
+	* ID: smalllserial
+	--
+	* BC: BenefitCode
+	* MinimumEGEScore: smallint
+}
+
+entity Olympiad {
+	* ID: serial
+	--
+	* Name: varchar[150]
+	* IDBenefits: smallint <<FK>>
+}
+entity OlympiadCertificate {
+	* ID: serial
+	--
+	* ID_Olympiad: integer <<FK>>
+	* IDSubject: integer <<FK>>
+}
+entity OlympiadCertificate2Speciality {
+	* ID_OlympiadCertificate: integer <<FK>>
+	* Speciality_Code: char[10] <<FK>>
+	--
+}
+
+entity EducationalProgram {
+	  * ID: serial
+	  --
+	  * ID_FormOfEducation: smallint <<FK>>
+	  * Speciality_Code: char[10] <<FK>>
+}
+
+'BenefitsForTheWinners ||-left-|{ Olympiad
+'Olympiad ||--o{ OlympiadCertificate
+'EducationalProgram }|--|| Speciality
+'Speciality }|-left-|| "В.И.П.С." Subject
+'Subject ||--|{ Subject2SpecialityEGE
+'Subject2SpecialityEGE }|--|| Speciality
+'OlympiadCertificate ||--|{ OlympiadCertificate2Speciality
+'OlympiadCertificate2Speciality }|--||  Speciality
+'OlympiadCertificate }o--|| Subject
+
+
+skinparam linetype ortho
+entity Enrollee {
+	* ID: serial
+	--
+	* Name: varchar[100]
+	* DOB: date
+	* EducationalDocument: DocumentOfEducation
+	* AchievementPoints: smallint
+	* RightToSpecialQuota: boolean
+	* AgreementOnTargetTraining: boolean
+	* RightToPriorityAdmission: boolean
+	* Disabled: boolean
+	* Compatriot: boolean
+}
+
+entity ReceivedCertificate {
+	* ID_Enrollee: integer <<FK>>
+	* ID_OlympiadCertificate: integer <<FK>>
+	--
+	* DateOfReceiving: date
+}
+entity OlympiadCertificate {
+	* ID: serial
+	--
+	* ID_Olympiad: integer <<FK>>
+	* IDSubject: integer <<FK>>
+}
+entity PassedEGE {
+	* ID: serial
+	--
+	* ID_Enrollee: integer <<FK>>
+	* ID_Subject: integer <<FK>>
+	* DateOfExam: date
+	* Score: smallint
+}
+entity Subject {
+	* ID: serial
+	--
+	* Name: varchar[80]
+	* MinimumEGEScore: smallint 
+}
+entity PassedVIPS {
+	* ID: serial
+	--
+	* ID_Enrollee: integer <<FK>>
+	* ID_Subject: integer <<FK>>
+	* Score: smallint
+}
+entity Citizenship {
+	* ID: smallserial
+	--
+	* Name: varchar[100]
+	* AgreementWithRF: boolean
+}
+
+entity Enrollee2Citizenship {
+	* ID_Enrollee: integer <<FK>>
+	* ID_Citizenship: integer <<FK>>
+	--
+}
+
+'Enrollee ||--o{ ReceivedCertificate
+'ReceivedCertificate }|--o| OlympiadCertificate
+'Enrollee ||--o{ PassedEGE
+'PassedEGE }o--|| Subject
+'Enrollee ||--o{ PassedVIPS
+'PassedVIPS }o--|| Subject
+'Enrollee ||--|{ Enrollee2Citizenship
+'Enrollee2Citizenship }|--|| Citizenship
+'OlympiadCertificate }o-left-|| Subject
+
+skinparam linetype ortho
+entity Enrollee {
+	* ID: serial
+	--
+	* Name: varchar[100]
+	* DOB: date
+	* EducationalDocument: DocumentOfEducation
+	* AchievementPoints: smallint
+	* RightToSpecialQuota: boolean
+	* AgreementOnTargetTraining: boolean
+	* RightToPriorityAdmission: boolean
+	* Disabled: boolean
+	* Compatriot: boolean
+}
+entity Application {
+	* ID: serial
+	--
+	* ID_Faculty: smallint <<FK>>
+	* ID_PaymentMethod: smallint <<FK>>
+	* ID_Quota: integer <<FK>>
+	* ID_EducationalProgram: integer <<FK>>
+	* ID_Enrollee: integer <<FK>>
+	* EnrolmentConsent: boolean
+}
+entity EducationalProgram {
+	  * ID: serial
+	  --
+	  * ID_FormOfEducation: smallint <<FK>>
+	  * Speciality_Code: char[10] <<FK>>
+}
+entity PaymentMethod {
+	  * ID: smallserial
+	  --
+	  * PaymentMethodType: TypeOfPaymentMethod
+}
+entity Faculty {
+	  * ID: smallserial
+	  --
+	  * ID_Branch: smallint <<FK>>
+	  * Name: varchar[150]
+}
+entity Quota {
+	* ID: serial
+	--
+	* ID_Faculty: smallint <<FK>>
+	* ID_EducationalProgram: integer <<FK>>
+	* NumberOfStudents: smallint
+	* QuotaType: TypeOfQuota
+}
+'Enrollee ||--|{ Application 
+'Application }|-left--|| EducationalProgram
+'Application }|-right-|| PaymentMethod
+'Application }|--|| Faculty
+'Application }o--o| Quota
+
+
+entity User {
+	* ID: serial
+	--
+	* ID_Role: smallint <<FK>>
+	* Login: varchar[50]
+	* Password: varchar[200]
+}
+entity Role {
+	* ID: smallserial
+	--
+	* Name: varchar[200]
+}	
+
+Application }|--|| Faculty
+Application }|-left--|| EducationalProgram
+Application }o--o| Quota
+Application }|-right-|| PaymentMethod
+BenefitsForTheWinners ||-left-|{ Olympiad
+Branch ||--|{ Faculty
+EducationalProgram ||--|{  PaymentMethod2EducationalProgram
+EducationalProgram }|--|| TypeOfEducation
+Enrollee2Citizenship }|--|| Citizenship
+Enrollee ||--|{ Application 
+Enrollee ||--|{ Enrollee2Citizenship
+Enrollee ||--o{ PassedEGE
+Enrollee ||--o{ PassedVIPS
+Enrollee ||--o{ ReceivedCertificate
+Faculty ||--o{ Quota
+Faculty ||--|{ PaymentMethod2EducationalProgram
+OlympiadCertificate2Speciality }|--||  Speciality
+OlympiadCertificate }o-left-|| Subject
+OlympiadCertificate ||--|{ OlympiadCertificate2Speciality
+OlympiadCertificate }o--|| Subject
+Olympiad ||--o{ OlympiadCertificate
+PassedEGE }o--|| Subject
+PassedVIPS }o--|| Subject
+PaymentMethod2EducationalProgram }o--|| PaymentMethod
+Quota }|--|| EducationalProgram
+ReceivedCertificate }|--|| OlympiadCertificate
+Speciality }|-left-|| "В.И.П.С." Subject
+Subject2SpecialityEGE }|--|| Speciality
+Subject ||--|{ Subject2SpecialityEGE
+User }o--|| Role
+@enduml
+

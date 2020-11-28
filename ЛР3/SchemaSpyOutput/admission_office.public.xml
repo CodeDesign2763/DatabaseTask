@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="admission_office" schema="public" type="PostgreSQL - 9.6.19">
+   <sequences>
+      <sequence increment="1" name="application_id_seq" startValue="1"/>
+      <sequence increment="1" name="benefitsforthewinners_id_seq" startValue="1"/>
+      <sequence increment="1" name="branch_id_seq" startValue="1"/>
+      <sequence increment="1" name="citizenship_id_seq" startValue="1"/>
+      <sequence increment="1" name="educationalprogram_id_seq" startValue="1"/>
+      <sequence increment="1" name="enrollee_id_seq" startValue="1"/>
+      <sequence increment="1" name="faculty_id_branch_seq" startValue="1"/>
+      <sequence increment="1" name="faculty_id_seq" startValue="1"/>
+      <sequence increment="1" name="olympiad_id_seq" startValue="1"/>
+      <sequence increment="1" name="olympiadcertificate_id_seq" startValue="1"/>
+      <sequence increment="1" name="passedege_id_seq" startValue="1"/>
+      <sequence increment="1" name="passedvips_id_seq" startValue="1"/>
+      <sequence increment="1" name="paymentmethod2educationalprogram_id_seq" startValue="1"/>
+      <sequence increment="1" name="paymentmethod_id_seq" startValue="1"/>
+      <sequence increment="1" name="quota_id_seq" startValue="1"/>
+      <sequence increment="1" name="subject_id_seq" startValue="1"/>
+      <sequence increment="1" name="typeofeducation_id_seq" startValue="1"/>
+   </sequences>
+   <tables>
+      <table name="application" numRows="150" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('application_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="id_faculty" nullable="false" remarks="" size="5" type="int2" typeCode="5">
+            <parent column="id" foreignKey="application_id_faculty_fkey" implied="false" onDeleteCascade="true" schema="public" table="faculty"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="id_paymentmethod" nullable="false" remarks="" size="5" type="int2" typeCode="5">
+            <parent column="id" foreignKey="application_id_paymentmethod_fkey" implied="false" onDeleteCascade="true" schema="public" table="paymentmethod"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="id_quota" nullable="true" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="application_id_quota_fkey" implied="false" onDeleteCascade="true" schema="public" table="quota"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="id_educationalprogram" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="application_id_educationalprogram_fkey" implied="false" onDeleteCascade="true" schema="public" table="educationalprogram"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="id_enrollee" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="application_id_enrollee_fkey" implied="false" onDeleteCascade="true" schema="public" table="enrollee"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="enrolmentconsent" nullable="true" remarks="" size="1" type="bool" typeCode="-7"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="application_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="benefitsforthewinners" numRows="2" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('benefitsforthewinners_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial" typeCode="5">
+            <child column="idbenefits" foreignKey="olympiad_idbenefits_fkey" implied="false" onDeleteCascade="true" schema="public" table="olympiad"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="bc" nullable="true" remarks="" size="2147483647" type="benefitcode" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="minimumegescore" nullable="true" remarks="" size="5" type="int2" typeCode="5"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="benefitsforthewinners_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="branch" numRows="5" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('branch_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial" typeCode="5">
+            <child column="id_branch" foreignKey="faculty_id_branch_fkey" implied="false" onDeleteCascade="true" schema="public" table="faculty"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="name" nullable="true" remarks="" size="150" type="varchar" typeCode="12"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="branch_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="citizenship" numRows="10" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('citizenship_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial" typeCode="5">
+            <child column="id_citizenship" foreignKey="enrollee2citizenship_id_citizenship_fkey" implied="false" onDeleteCascade="true" schema="public" table="enrollee2citizenship"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="name" nullable="true" remarks="" size="100" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="agreementwithrf" nullable="true" remarks="" size="1" type="bool" typeCode="-7"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="citizenship_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="educationalprogram" numRows="10" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('educationalprogram_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial" typeCode="4">
+            <child column="id_educationalprogram" foreignKey="application_id_educationalprogram_fkey" implied="false" onDeleteCascade="true" schema="public" table="application"/>
+            <child column="id_educationalprogram" foreignKey="paymentmethod2educationalprogram_id_educationalprogram_fkey" implied="false" onDeleteCascade="true" schema="public" table="paymentmethod2educationalprogram"/>
+            <child column="id_educationalprogram" foreignKey="quota_id_educationalprogram_fkey" implied="false" onDeleteCascade="true" schema="public" table="quota"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="id_formofeducation" nullable="false" remarks="" size="5" type="int2" typeCode="5">
+            <parent column="id" foreignKey="educationalprogram_id_formofeducation_fkey" implied="false" onDeleteCascade="true" schema="public" table="typeofeducation"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="speciality_code" nullable="false" remarks="" size="10" type="bpchar" typeCode="1">
+            <parent column="speciality_code" foreignKey="educationalprogram_speciality_code_fkey" implied="false" onDeleteCascade="true" schema="public" table="speciality"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="educationalprogram_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="enrollee" numRows="145" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('enrollee_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial" typeCode="4">
+            <child column="id_enrollee" foreignKey="application_id_enrollee_fkey" implied="false" onDeleteCascade="true" schema="public" table="application"/>
+            <child column="id_enrollee" foreignKey="enrollee2citizenship_id_enrollee_fkey" implied="false" onDeleteCascade="true" schema="public" table="enrollee2citizenship"/>
+            <child column="id_enrollee" foreignKey="passedege_id_enrollee_fkey" implied="false" onDeleteCascade="true" schema="public" table="passedege"/>
+            <child column="id_enrollee" foreignKey="passedvips_id_enrollee_fkey" implied="false" onDeleteCascade="true" schema="public" table="passedvips"/>
+            <child column="id_enrollee" foreignKey="receivedcertificate_id_enrollee_fkey" implied="false" onDeleteCascade="true" schema="public" table="receivedcertificate"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="name" nullable="true" remarks="" size="100" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="dob" nullable="true" remarks="" size="13" type="date" typeCode="91"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="educationaldocument" nullable="true" remarks="" size="2147483647" type="documentofeducation" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="achievementpoints" nullable="true" remarks="" size="5" type="int2" typeCode="5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="righttospecialquota" nullable="true" remarks="" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="agreementontargettraining" nullable="true" remarks="" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="righttopriorityadmission" nullable="true" remarks="" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="disabled" nullable="true" remarks="" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="compatriot" nullable="true" remarks="" size="1" type="bool" typeCode="-7"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="enrollee_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="enrollee2citizenship" numRows="150" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id_enrollee" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="enrollee2citizenship_id_enrollee_fkey" implied="false" onDeleteCascade="true" schema="public" table="enrollee"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="id_citizenship" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="enrollee2citizenship_id_citizenship_fkey" implied="false" onDeleteCascade="true" schema="public" table="citizenship"/>
+         </column>
+         <primaryKey column="id_enrollee" sequenceNumberInPK="1"/>
+         <primaryKey column="id_citizenship" sequenceNumberInPK="2"/>
+         <index name="enrollee2citizenship_pkey" unique="true">
+            <column ascending="true" name="id_enrollee"/>
+            <column ascending="true" name="id_citizenship"/>
+         </index>
+      </table>
+      <table name="faculty" numRows="10" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('faculty_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial" typeCode="5">
+            <child column="id_faculty" foreignKey="application_id_faculty_fkey" implied="false" onDeleteCascade="true" schema="public" table="application"/>
+            <child column="id_faculty" foreignKey="paymentmethod2educationalprogram_id_faculty_fkey" implied="false" onDeleteCascade="true" schema="public" table="paymentmethod2educationalprogram"/>
+            <child column="id_faculty" foreignKey="quota_id_faculty_fkey" implied="false" onDeleteCascade="true" schema="public" table="quota"/>
+         </column>
+         <column autoUpdated="true" defaultValue="nextval('faculty_id_branch_seq'::regclass)" digits="0" id="1" name="id_branch" nullable="false" remarks="" size="5" type="smallserial" typeCode="5">
+            <parent column="id" foreignKey="faculty_id_branch_fkey" implied="false" onDeleteCascade="true" schema="public" table="branch"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="name" nullable="true" remarks="" size="150" type="varchar" typeCode="12"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="faculty_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="olympiad" numRows="10" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('olympiad_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial" typeCode="4">
+            <child column="id_olympiad" foreignKey="olympiadcertificate_id_olympiad_fkey" implied="false" onDeleteCascade="true" schema="public" table="olympiadcertificate"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="name" nullable="true" remarks="" size="150" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="idbenefits" nullable="false" remarks="" size="5" type="int2" typeCode="5">
+            <parent column="id" foreignKey="olympiad_idbenefits_fkey" implied="false" onDeleteCascade="true" schema="public" table="benefitsforthewinners"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="olympiad_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="olympiadcertificate" numRows="15" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('olympiadcertificate_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial" typeCode="4">
+            <child column="id_olympiadcertificate" foreignKey="olympiadcertificate2speciality_id_olympiadcertificate_fkey" implied="false" onDeleteCascade="true" schema="public" table="olympiadcertificate2speciality"/>
+            <child column="id_olympiadcertificate" foreignKey="receivedcertificate_id_olympiadcertificate_fkey" implied="false" onDeleteCascade="true" schema="public" table="receivedcertificate"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="id_olympiad" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="olympiadcertificate_id_olympiad_fkey" implied="false" onDeleteCascade="true" schema="public" table="olympiad"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="idsubject" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="olympiadcertificate_idsubject_fkey" implied="false" onDeleteCascade="true" schema="public" table="subject"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="olympiadcertificate_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="olympiadcertificate2speciality" numRows="11" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id_olympiadcertificate" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="olympiadcertificate2speciality_id_olympiadcertificate_fkey" implied="false" onDeleteCascade="true" schema="public" table="olympiadcertificate"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="speciality_code" nullable="false" remarks="" size="10" type="bpchar" typeCode="1">
+            <parent column="speciality_code" foreignKey="olympiadcertificate2speciality_speciality_code_fkey" implied="false" onDeleteCascade="true" schema="public" table="speciality"/>
+         </column>
+         <primaryKey column="id_olympiadcertificate" sequenceNumberInPK="1"/>
+         <primaryKey column="speciality_code" sequenceNumberInPK="2"/>
+         <index name="olympiadcertificate2speciality_pkey" unique="true">
+            <column ascending="true" name="id_olympiadcertificate"/>
+            <column ascending="true" name="speciality_code"/>
+         </index>
+      </table>
+      <table name="passedege" numRows="335" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('passedege_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="id_enrollee" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="passedege_id_enrollee_fkey" implied="false" onDeleteCascade="true" schema="public" table="enrollee"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="id_subject" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="passedege_id_subject_fkey" implied="false" onDeleteCascade="false" schema="public" table="subject"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="dateofexam" nullable="true" remarks="" size="13" type="date" typeCode="91"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="score" nullable="true" remarks="" size="5" type="int2" typeCode="5"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="passedege_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="passedvips" numRows="40" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('passedvips_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="id_enrollee" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="passedvips_id_enrollee_fkey" implied="false" onDeleteCascade="true" schema="public" table="enrollee"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="id_subject" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="passedvips_id_subject_fkey" implied="false" onDeleteCascade="true" schema="public" table="subject"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="score" nullable="true" remarks="" size="5" type="int2" typeCode="5"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="passedvips_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="paymentmethod" numRows="2" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('paymentmethod_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial" typeCode="5">
+            <child column="id_paymentmethod" foreignKey="application_id_paymentmethod_fkey" implied="false" onDeleteCascade="true" schema="public" table="application"/>
+            <child column="id_paymentmethod" foreignKey="paymentmethod2educationalprogram_id_paymentmethod_fkey" implied="false" onDeleteCascade="true" schema="public" table="paymentmethod2educationalprogram"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="paymentmethodtype" nullable="true" remarks="" size="2147483647" type="typeofpaymentmethod" typeCode="12"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="paymentmethod_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="paymentmethod2educationalprogram" numRows="12" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('paymentmethod2educationalprogram_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="id_faculty" nullable="false" remarks="" size="5" type="int2" typeCode="5">
+            <parent column="id" foreignKey="paymentmethod2educationalprogram_id_faculty_fkey" implied="false" onDeleteCascade="true" schema="public" table="faculty"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="id_paymentmethod" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="paymentmethod2educationalprogram_id_paymentmethod_fkey" implied="false" onDeleteCascade="true" schema="public" table="paymentmethod"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="id_educationalprogram" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="paymentmethod2educationalprogram_id_educationalprogram_fkey" implied="false" onDeleteCascade="true" schema="public" table="educationalprogram"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="price" nullable="true" remarks="" size="2147483647" type="money" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="numberofstudents" nullable="true" remarks="" size="5" type="int2" typeCode="5"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="paymentmethod2educationalprogram_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="quota" numRows="10" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('quota_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial" typeCode="4">
+            <child column="id_quota" foreignKey="application_id_quota_fkey" implied="false" onDeleteCascade="true" schema="public" table="application"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="id_faculty" nullable="false" remarks="" size="5" type="int2" typeCode="5">
+            <parent column="id" foreignKey="quota_id_faculty_fkey" implied="false" onDeleteCascade="true" schema="public" table="faculty"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="id_educationalprogram" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="quota_id_educationalprogram_fkey" implied="false" onDeleteCascade="true" schema="public" table="educationalprogram"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="numberofstudents" nullable="true" remarks="" size="5" type="int2" typeCode="5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="quotatype" nullable="true" remarks="" size="2147483647" type="typeofquota" typeCode="12"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="quota_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="receivedcertificate" numRows="23" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id_enrollee" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="receivedcertificate_id_enrollee_fkey" implied="false" onDeleteCascade="true" schema="public" table="enrollee"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="id_olympiadcertificate" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="receivedcertificate_id_olympiadcertificate_fkey" implied="false" onDeleteCascade="true" schema="public" table="olympiadcertificate"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="dateofreceiving" nullable="true" remarks="" size="13" type="date" typeCode="91"/>
+         <primaryKey column="id_enrollee" sequenceNumberInPK="1"/>
+         <primaryKey column="id_olympiadcertificate" sequenceNumberInPK="2"/>
+         <index name="receivedcertificate_pkey" unique="true">
+            <column ascending="true" name="id_enrollee"/>
+            <column ascending="true" name="id_olympiadcertificate"/>
+         </index>
+      </table>
+      <table name="speciality" numRows="10" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="speciality_code" nullable="false" remarks="" size="10" type="bpchar" typeCode="1">
+            <child column="speciality_code" foreignKey="educationalprogram_speciality_code_fkey" implied="false" onDeleteCascade="true" schema="public" table="educationalprogram"/>
+            <child column="speciality_code" foreignKey="olympiadcertificate2speciality_speciality_code_fkey" implied="false" onDeleteCascade="true" schema="public" table="olympiadcertificate2speciality"/>
+            <child column="speciality_code" foreignKey="subject2specialityege_speciality_code_fkey" implied="false" onDeleteCascade="true" schema="public" table="subject2specialityege"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="subject_vips" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="speciality_subject_vips_fkey" implied="false" onDeleteCascade="false" schema="public" table="subject"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="name" nullable="true" remarks="" size="200" type="varchar" typeCode="12"/>
+         <primaryKey column="speciality_code" sequenceNumberInPK="1"/>
+         <index name="speciality_pkey" unique="true">
+            <column ascending="true" name="speciality_code"/>
+         </index>
+      </table>
+      <table name="subject" numRows="10" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('subject_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial" typeCode="4">
+            <child column="idsubject" foreignKey="olympiadcertificate_idsubject_fkey" implied="false" onDeleteCascade="true" schema="public" table="olympiadcertificate"/>
+            <child column="id_subject" foreignKey="passedege_id_subject_fkey" implied="false" onDeleteCascade="false" schema="public" table="passedege"/>
+            <child column="id_subject" foreignKey="passedvips_id_subject_fkey" implied="false" onDeleteCascade="true" schema="public" table="passedvips"/>
+            <child column="subject_vips" foreignKey="speciality_subject_vips_fkey" implied="false" onDeleteCascade="false" schema="public" table="speciality"/>
+            <child column="idsubject" foreignKey="subject2specialityege_idsubject_fkey" implied="false" onDeleteCascade="false" schema="public" table="subject2specialityege"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="name" nullable="true" remarks="" size="80" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="minimumegescore" nullable="true" remarks="" size="5" type="int2" typeCode="5"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="subject_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="subject2specialityege" numRows="15" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="speciality_code" nullable="false" remarks="" size="10" type="bpchar" typeCode="1">
+            <parent column="speciality_code" foreignKey="subject2specialityege_speciality_code_fkey" implied="false" onDeleteCascade="true" schema="public" table="speciality"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="idsubject" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="subject2specialityege_idsubject_fkey" implied="false" onDeleteCascade="false" schema="public" table="subject"/>
+         </column>
+         <primaryKey column="speciality_code" sequenceNumberInPK="1"/>
+         <primaryKey column="idsubject" sequenceNumberInPK="2"/>
+         <index name="subject2specialityege_pkey" unique="true">
+            <column ascending="true" name="speciality_code"/>
+            <column ascending="true" name="idsubject"/>
+         </index>
+      </table>
+      <table name="typeofeducation" numRows="3" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('typeofeducation_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="smallserial" typeCode="5">
+            <child column="id_formofeducation" foreignKey="educationalprogram_id_formofeducation_fkey" implied="false" onDeleteCascade="true" schema="public" table="educationalprogram"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="8" id="1" name="trainingperiod" nullable="true" remarks="" size="8" type="float4" typeCode="7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="name" nullable="true" remarks="" size="50" type="varchar" typeCode="12"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="typeofeducation_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+   </tables>
+</database>

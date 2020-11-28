@@ -203,7 +203,7 @@ entity Enrollee2Citizenship {
 }
 
 Enrollee ||--o{ ReceivedCertificate
-ReceivedCertificate }|--o| OlympiadCertificate
+ReceivedCertificate }|--|| OlympiadCertificate
 Enrollee ||--o{ PassedEGE
 PassedEGE }o--|| Subject
 Enrollee ||--o{ PassedVIPS
