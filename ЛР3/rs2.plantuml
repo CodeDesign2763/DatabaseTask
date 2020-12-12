@@ -1,0 +1,74 @@
+@startuml
+skinparam linetype ortho
+entity exhibit {
+	  * id: serial
+	  --
+	  * name varchar(100)
+	  * dataoforigin date
+	  * description text
+	  * id_showroom smallint <<FK>>
+}
+
+entity event {
+	  * id: bigserial
+	  --
+	  * name varchar(100)
+	  * startdate date
+	  * enddate date
+	  * description text
+}
+
+entity building {
+	  * id: smallserial
+	  --
+	  * adress varchar(100)
+	  * name varchar(100)
+	  * phone varchar(30)
+	  * id_employee integer <<FK>>
+}
+
+entity exhibit2event {
+	* id_exhibit integer
+	* id_event bigint
+	--
+}
+
+entity showroom {
+	* id smallserial
+	--
+	name varchar(100)
+	id_employee integer <<FK>>
+	id_building smallint <<FK>>
+}
+
+entity employee {
+	* id serial
+	--
+	fullname varchar(100)
+	phone varchar(200)
+	adress varchar(200)
+}
+
+entity event2employee {
+	* id_event bigint 
+	* id_employee integer
+	--
+}
+
+
+
+
+
+building ||--|{ showroom
+building }o--|| employee
+
+showroom |o--|{ exhibit
+showroom }o--|| employee	
+
+exhibit ||--|{ exhibit2event
+exhibit2event }o--|| event
+
+event ||--o{ event2employee
+event2employee }|-right-|| employee
+
+@enduml
