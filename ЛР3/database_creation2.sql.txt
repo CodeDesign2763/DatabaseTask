@@ -1,0 +1,256 @@
+DROP DATABASE
+CREATE DATABASE
+Вы подключены к базе данных "addtask" как пользователь "postgres".
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+ALTER TABLE
+       Сообщение        
+------------------------
+ Добавлен атрибут price
+(1 строка)
+
+                                  Таблица "public.building"
+   Столбец   |          Тип           |                     Модификаторы                      
+-------------+------------------------+-------------------------------------------------------
+ id          | smallint               | NOT NULL DEFAULT nextval('building_id_seq'::regclass)
+ adress      | character varying(100) | 
+ name        | character varying(100) | 
+ phone       | character varying(30)  | 
+ id_employee | integer                | NOT NULL
+ price       | money                  | NOT NULL
+Индексы:
+    "building_pkey" PRIMARY KEY, btree (id)
+Ограничения внешнего ключа:
+    "building_id_employee_fkey" FOREIGN KEY (id_employee) REFERENCES employee(id)
+Ссылки извне:
+    TABLE "showroom" CONSTRAINT "showroom_id_building_fkey" FOREIGN KEY (id_building) REFERENCES building(id)
+
+INSERT 0 1
+INSERT 0 1
+ALTER TABLE
+              Сообщение              
+-------------------------------------
+ Преобразование money-->varchar(100)
+(1 строка)
+
+ id |      adress      |          name           |  phone   | id_employee |    price     
+----+------------------+-------------------------+----------+-------------+--------------
+  1 | ул. Кирова, д. 1 | Главный музейный корпус | 11-11-11 |           1 | 200 000.25 ₽
+(1 строка)
+
+                                  Таблица "public.building"
+   Столбец   |          Тип           |                     Модификаторы                      
+-------------+------------------------+-------------------------------------------------------
+ id          | smallint               | NOT NULL DEFAULT nextval('building_id_seq'::regclass)
+ adress      | character varying(100) | 
+ name        | character varying(100) | 
+ phone       | character varying(30)  | 
+ id_employee | integer                | NOT NULL
+ price       | character varying(100) | NOT NULL
+Индексы:
+    "building_pkey" PRIMARY KEY, btree (id)
+Ограничения внешнего ключа:
+    "building_id_employee_fkey" FOREIGN KEY (id_employee) REFERENCES employee(id)
+Ссылки извне:
+    TABLE "showroom" CONSTRAINT "showroom_id_building_fkey" FOREIGN KEY (id_building) REFERENCES building(id)
+
+ALTER TABLE
+               Сообщение               
+---------------------------------------
+ Обратное преобразование типа атрибута
+(1 строка)
+
+                                  Таблица "public.building"
+   Столбец   |          Тип           |                     Модификаторы                      
+-------------+------------------------+-------------------------------------------------------
+ id          | smallint               | NOT NULL DEFAULT nextval('building_id_seq'::regclass)
+ adress      | character varying(100) | 
+ name        | character varying(100) | 
+ phone       | character varying(30)  | 
+ id_employee | integer                | NOT NULL
+ price       | money                  | NOT NULL
+Индексы:
+    "building_pkey" PRIMARY KEY, btree (id)
+Ограничения внешнего ключа:
+    "building_id_employee_fkey" FOREIGN KEY (id_employee) REFERENCES employee(id)
+Ссылки извне:
+    TABLE "showroom" CONSTRAINT "showroom_id_building_fkey" FOREIGN KEY (id_building) REFERENCES building(id)
+
+ id |      adress      |          name           |  phone   | id_employee |    price     
+----+------------------+-------------------------+----------+-------------+--------------
+  1 | ул. Кирова, д. 1 | Главный музейный корпус | 11-11-11 |           1 | 200 000.25 ₽
+(1 строка)
+
+ALTER TABLE
+             Сообщение              
+------------------------------------
+ Удаление атрибута price из таблицы
+(1 строка)
+
+                                  Таблица "public.building"
+   Столбец   |          Тип           |                     Модификаторы                      
+-------------+------------------------+-------------------------------------------------------
+ id          | smallint               | NOT NULL DEFAULT nextval('building_id_seq'::regclass)
+ adress      | character varying(100) | 
+ name        | character varying(100) | 
+ phone       | character varying(30)  | 
+ id_employee | integer                | NOT NULL
+Индексы:
+    "building_pkey" PRIMARY KEY, btree (id)
+Ограничения внешнего ключа:
+    "building_id_employee_fkey" FOREIGN KEY (id_employee) REFERENCES employee(id)
+Ссылки извне:
+    TABLE "showroom" CONSTRAINT "showroom_id_building_fkey" FOREIGN KEY (id_building) REFERENCES building(id)
+
+ALTER TABLE
+                     Сообщение                     
+---------------------------------------------------
+ Установка ограничения NOT NULL для атрибута phone
+(1 строка)
+
+                                  Таблица "public.building"
+   Столбец   |          Тип           |                     Модификаторы                      
+-------------+------------------------+-------------------------------------------------------
+ id          | smallint               | NOT NULL DEFAULT nextval('building_id_seq'::regclass)
+ adress      | character varying(100) | 
+ name        | character varying(100) | 
+ phone       | character varying(30)  | NOT NULL
+ id_employee | integer                | NOT NULL
+Индексы:
+    "building_pkey" PRIMARY KEY, btree (id)
+Ограничения внешнего ключа:
+    "building_id_employee_fkey" FOREIGN KEY (id_employee) REFERENCES employee(id)
+Ссылки извне:
+    TABLE "showroom" CONSTRAINT "showroom_id_building_fkey" FOREIGN KEY (id_building) REFERENCES building(id)
+
+ALTER TABLE
+                    Сообщение                     
+--------------------------------------------------
+ Удаление ограничения NOT NULL для атрибута phone
+(1 строка)
+
+                                  Таблица "public.building"
+   Столбец   |          Тип           |                     Модификаторы                      
+-------------+------------------------+-------------------------------------------------------
+ id          | smallint               | NOT NULL DEFAULT nextval('building_id_seq'::regclass)
+ adress      | character varying(100) | 
+ name        | character varying(100) | 
+ phone       | character varying(30)  | 
+ id_employee | integer                | NOT NULL
+Индексы:
+    "building_pkey" PRIMARY KEY, btree (id)
+Ограничения внешнего ключа:
+    "building_id_employee_fkey" FOREIGN KEY (id_employee) REFERENCES employee(id)
+Ссылки извне:
+    TABLE "showroom" CONSTRAINT "showroom_id_building_fkey" FOREIGN KEY (id_building) REFERENCES building(id)
+
+ALTER TABLE
+                    Сообщение                    
+-------------------------------------------------
+ Установить значение атрибута phone по умолчанию
+(1 строка)
+
+                                  Таблица "public.building"
+   Столбец   |          Тип           |                     Модификаторы                      
+-------------+------------------------+-------------------------------------------------------
+ id          | smallint               | NOT NULL DEFAULT nextval('building_id_seq'::regclass)
+ adress      | character varying(100) | 
+ name        | character varying(100) | 
+ phone       | character varying(30)  | DEFAULT '29-29-29'::character varying
+ id_employee | integer                | NOT NULL
+Индексы:
+    "building_pkey" PRIMARY KEY, btree (id)
+Ограничения внешнего ключа:
+    "building_id_employee_fkey" FOREIGN KEY (id_employee) REFERENCES employee(id)
+Ссылки извне:
+    TABLE "showroom" CONSTRAINT "showroom_id_building_fkey" FOREIGN KEY (id_building) REFERENCES building(id)
+
+ALTER TABLE
+ALTER TABLE
+                   Сообщение                   
+-----------------------------------------------
+ Удаление значения атрибута phone по умолчанию
+(1 строка)
+
+                                  Таблица "public.building"
+   Столбец   |          Тип           |                     Модификаторы                      
+-------------+------------------------+-------------------------------------------------------
+ id          | smallint               | NOT NULL DEFAULT nextval('building_id_seq'::regclass)
+ adress      | character varying(100) | 
+ name        | character varying(100) | 
+ phone       | character varying(30)  | 
+ id_employee | integer                | NOT NULL
+Индексы:
+    "building_pkey" PRIMARY KEY, btree (id)
+Ограничения внешнего ключа:
+    "building_id_employee_fkey" FOREIGN KEY (id_employee) REFERENCES employee(id)
+Ссылки извне:
+    TABLE "showroom" CONSTRAINT "showroom_id_building_fkey" FOREIGN KEY (id_building) REFERENCES building(id)
+
+CREATE TABLE
+ALTER TABLE
+ALTER TABLE
+               Сообщение                
+----------------------------------------
+ Добавление первичного и внешнего ключа
+(1 строка)
+
+           Таблица "public.testtable"
+ Столбец |          Тип          | Модификаторы 
+---------+-----------------------+--------------
+ atr1    | character varying(20) | NOT NULL
+ atr2    | integer               | 
+Индексы:
+    "testtable_pkey" PRIMARY KEY, btree (atr1)
+Ограничения внешнего ключа:
+    "testtable_atr2_fkey" FOREIGN KEY (atr2) REFERENCES employee(id)
+
+DROP TABLE
+INSERT 0 1
+INSERT 0 1
+ id |       adress       |          name           |  phone   | id_employee 
+----+--------------------+-------------------------+----------+-------------
+  1 | ул. Кирова, д. 1   | Главный музейный корпус | 11-11-11 |           1
+  2 | ул. Королева, д. 8 | Новый музейный корпус   | 55-55-55 |           2
+(2 строки)
+
+INSERT 0 1
+INSERT 0 1
+ id |               name               | id_employee | id_building 
+----+----------------------------------+-------------+-------------
+  1 | Зал истории средних веков        |           1 |           1
+  2 | Зал истории Второй мировой войны |           2 |           2
+(2 строки)
+
+INSERT 0 1
+INSERT 0 1
+ id |    name    | dateoforigin |                description                 | id_showroom 
+----+------------+--------------+--------------------------------------------+-------------
+  1 | Экскалибур | 0600-01-01   | Легендарный меч, заключенный в камень.    +|           1
+    |            |              | Найден при строительстве торгового центра. | 
+  2 | ППС-43     | 1944-03-20   | Пистолет-пулемет Судаева ППС-43            |           2
+(2 строки)
+
+INSERT 0 1
+INSERT 0 1
+ id |         name         | startdate  |  enddate   |                 description                  
+----+----------------------+------------+------------+----------------------------------------------
+  1 | Первая мировая война | 1914-07-28 | 1918-11-11 | Одна из самых                               +
+    |                      |            |            | широкомасштабных войн в истории человечества
+  2 | Вторая мировая война | 1939-09-01 | 1945-09-12 | Крупнейший вооруженный конфликт             +
+    |                      |            |            | в истории человечества
+(2 строки)
+
+INSERT 0 1
+INSERT 0 1
+ id_event | id_employee 
+----------+-------------
+        1 |           2
+        2 |           2
+(2 строки)
+

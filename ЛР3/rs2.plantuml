@@ -4,7 +4,7 @@ entity exhibit {
 	  * id: serial
 	  --
 	  * name varchar(100)
-	  * dataoforigin date
+	  * dateoforigin date
 	  * description text
 	  * id_showroom smallint <<FK>>
 }
