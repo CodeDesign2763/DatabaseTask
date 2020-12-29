@@ -1,3 +1,6 @@
+/* Удалить БД приемной комиссии, если она создана */
+DROP DATABASE IF EXISTS admission_office;
+
 /* Создание базы данных приемной комиссии */
 CREATE DATABASE admission_office 
 	OWNER postgres ENCODING 'UTF8';
@@ -104,7 +107,7 @@ CREATE TABLE subject (
 SELECT loaddata('Subject',TRUE);
 
 CREATE TABLE speciality (
-	 speciality_code char(10),
+	 speciality_code varchar(10),
 	 PRIMARY KEY (speciality_code),
 	 subject_vips integer NOT NULL REFERENCES subject
 	 ON DELETE SET NULL,
@@ -120,7 +123,7 @@ CREATE TABLE educationalprogram (
 	   PRIMARY KEY (id),
 	   id_formofeducation smallint NOT NULL REFERENCES typeofeducation
 	   ON DELETE CASCADE,
-	   speciality_code char(10) NOT NULL REFERENCES speciality
+	   speciality_code varchar(10) NOT NULL REFERENCES speciality
 	   ON DELETE CASCADE
 );
 

@@ -45,7 +45,7 @@ entity EducationalProgram {
 	  * ID: serial
 	  --
 	  * ID_FormOfEducation: smallint <<FK>>
-	  * Speciality_Code: char[10] <<FK>>
+	  * Speciality_Code: varchar(10) <<FK>>
 }
 entity PaymentMethod {
 	  * ID: smallserial
@@ -55,7 +55,7 @@ entity PaymentMethod {
 
 
 entity Speciality {
-	* Speciality_Code: char[10]
+	* Speciality_Code: varchar(10)
 	--
 	* Subject_VIPS: integer <<FK>>
 	* Name: varchar[200]
@@ -79,13 +79,13 @@ EducationalProgram }|--|| Speciality
 newpage
 skinparam linetype ortho
 entity Speciality {
-	* Speciality_Code: char[10]
+	* Speciality_Code: varchar(10)
 	--
 	* Subject_VIPS: integer <<FK>>
 	* Name: varchar[200]
 }
 entity Subject2SpecialityEGE {
-	* Speciality_Code: char[10] <<FK>>
+	* Speciality_Code: varchar(10) <<FK>>
 	* IDSubject: integer <<FK>>
 	--
 }
@@ -118,7 +118,7 @@ entity OlympiadCertificate {
 }
 entity OlympiadCertificate2Speciality {
 	* ID_OlympiadCertificate: integer <<FK>>
-	* Speciality_Code: char[10] <<FK>>
+	* Speciality_Code: varchar(10) <<FK>>
 	--
 }
 
@@ -126,7 +126,7 @@ entity EducationalProgram {
 	  * ID: serial
 	  --
 	  * ID_FormOfEducation: smallint <<FK>>
-	  * Speciality_Code: char[10] <<FK>>
+	  * Speciality_Code: varchar(10) <<FK>>
 }
 
 BenefitsForTheWinners ||-left-|{ Olympiad
@@ -240,7 +240,7 @@ entity EducationalProgram {
 	  * ID: serial
 	  --
 	  * ID_FormOfEducation: smallint <<FK>>
-	  * Speciality_Code: char[10] <<FK>>
+	  * Speciality_Code: varchar(10) <<FK>>
 }
 entity PaymentMethod {
 	  * ID: smallserial

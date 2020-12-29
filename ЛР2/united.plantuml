@@ -1,6 +1,6 @@
 @startuml
 skinparam linetype ortho
-left to right direction
+'left to right direction
 entity Branch {
 	  * ID: smallserial
 	  --
@@ -41,7 +41,7 @@ entity EducationalProgram {
 	  * ID: serial
 	  --
 	  * ID_FormOfEducation: smallint <<FK>>
-	  * Speciality_Code: char[10] <<FK>>
+	  * Speciality_Code: varchar(10) <<FK>>
 }
 entity PaymentMethod {
 	  * ID: smallserial
@@ -51,7 +51,7 @@ entity PaymentMethod {
 
 
 entity Speciality {
-	* Speciality_Code: char[10]
+	* Speciality_Code: varchar(10)
 	--
 	* Subject_VIPS: integer <<FK>>
 	* Name: varchar[200]
@@ -74,23 +74,23 @@ entity Speciality {
 
 
 skinparam linetype ortho
-entity Speciality {
-	* Speciality_Code: char[10]
-	--
-	* Subject_VIPS: integer <<FK>>
-	* Name: varchar[200]
-}
+'entity Speciality {
+	'* Speciality_Code: varchar(10)
+	'--
+	'* Subject_VIPS: integer <<FK>>
+	'* Name: varchar[200]
+'}
 entity Subject2SpecialityEGE {
-	* Speciality_Code: char[10] <<FK>>
+	* Speciality_Code: varchar(10) <<FK>>
 	* IDSubject: integer <<FK>>
 	--
 }
-entity Subject {
-	* ID: serial
-	--
-	* Name: varchar[80]
-	* MinimumEGEScore: smallint 
-}
+'entity Subject {
+	'* ID: serial
+	'--
+	'* Name: varchar[80]
+	'* MinimumEGEScore: smallint 
+'}
 
 entity BenefitsForTheWinners {
 	* ID: smalllserial
@@ -113,16 +113,16 @@ entity OlympiadCertificate {
 }
 entity OlympiadCertificate2Speciality {
 	* ID_OlympiadCertificate: integer <<FK>>
-	* Speciality_Code: char[10] <<FK>>
+	* Speciality_Code: varchar(10) <<FK>>
 	--
 }
 
-entity EducationalProgram {
-	  * ID: serial
-	  --
-	  * ID_FormOfEducation: smallint <<FK>>
-	  * Speciality_Code: char[10] <<FK>>
-}
+'entity EducationalProgram {
+	  '* ID: serial
+	  '--
+	  '* ID_FormOfEducation: smallint <<FK>>
+	  '* Speciality_Code: varchar(10) <<FK>>
+'}
 
 'BenefitsForTheWinners ||-left-|{ Olympiad
 'Olympiad ||--o{ OlympiadCertificate
@@ -156,12 +156,12 @@ entity ReceivedCertificate {
 	--
 	* DateOfReceiving: date
 }
-entity OlympiadCertificate {
-	* ID: serial
-	--
-	* ID_Olympiad: integer <<FK>>
-	* IDSubject: integer <<FK>>
-}
+'entity OlympiadCertificate {
+	'* ID: serial
+	'--
+	'* ID_Olympiad: integer <<FK>>
+	'* IDSubject: integer <<FK>>
+'}
 entity PassedEGE {
 	* ID: serial
 	--
@@ -207,19 +207,19 @@ entity Enrollee2Citizenship {
 'OlympiadCertificate }o-left-|| Subject
 
 skinparam linetype ortho
-entity Enrollee {
-	* ID: serial
-	--
-	* Name: varchar[100]
-	* DOB: date
-	* EducationalDocument: DocumentOfEducation
-	* AchievementPoints: smallint
-	* RightToSpecialQuota: boolean
-	* AgreementOnTargetTraining: boolean
-	* RightToPriorityAdmission: boolean
-	* Disabled: boolean
-	* Compatriot: boolean
-}
+'entity Enrollee {
+	'* ID: serial
+	'--
+	'* Name: varchar[100]
+	'* DOB: date
+	'* EducationalDocument: DocumentOfEducation
+	'* AchievementPoints: smallint
+	'* RightToSpecialQuota: boolean
+	'* AgreementOnTargetTraining: boolean
+	'* RightToPriorityAdmission: boolean
+	'* Disabled: boolean
+	'* Compatriot: boolean
+'}
 entity Application {
 	* ID: serial
 	--
@@ -230,31 +230,31 @@ entity Application {
 	* ID_Enrollee: integer <<FK>>
 	* EnrolmentConsent: boolean
 }
-entity EducationalProgram {
-	  * ID: serial
-	  --
-	  * ID_FormOfEducation: smallint <<FK>>
-	  * Speciality_Code: char[10] <<FK>>
-}
-entity PaymentMethod {
-	  * ID: smallserial
-	  --
-	  * PaymentMethodType: TypeOfPaymentMethod
-}
-entity Faculty {
-	  * ID: smallserial
-	  --
-	  * ID_Branch: smallint <<FK>>
-	  * Name: varchar[150]
-}
-entity Quota {
-	* ID: serial
-	--
-	* ID_Faculty: smallint <<FK>>
-	* ID_EducationalProgram: integer <<FK>>
-	* NumberOfStudents: smallint
-	* QuotaType: TypeOfQuota
-}
+'entity EducationalProgram {
+	  '* ID: serial
+	  '--
+	  '* ID_FormOfEducation: smallint <<FK>>
+	  '* Speciality_Code: varchar(10) <<FK>>
+'}
+'entity PaymentMethod {
+	  '* ID: smallserial
+	  '--
+	  '* PaymentMethodType: TypeOfPaymentMethod
+'}
+'entity Faculty {
+	  '* ID: smallserial
+	  '--
+	  '* ID_Branch: smallint <<FK>>
+	  '* Name: varchar[150]
+'}
+'entity Quota {
+	'* ID: serial
+	'--
+	'* ID_Faculty: smallint <<FK>>
+	'* ID_EducationalProgram: integer <<FK>>
+	'* NumberOfStudents: smallint
+	'* QuotaType: TypeOfQuota
+'}
 'Enrollee ||--|{ Application 
 'Application }|-left--|| EducationalProgram
 'Application }|-right-|| PaymentMethod
@@ -304,6 +304,7 @@ ReceivedCertificate }|--|| OlympiadCertificate
 Speciality }|-left-|| "В.И.П.С." Subject
 Subject2SpecialityEGE }|--|| Speciality
 Subject ||--|{ Subject2SpecialityEGE
+Speciality ||--o{ EducationalProgram
 User }o--|| Role
 @enduml
 
