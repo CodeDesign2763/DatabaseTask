@@ -5,15 +5,14 @@
 \c admission_office
 
 -- Update
-select 'Уменьшим значение минимального балла ЕГЭ
- для олимпиад 2-го типа'
-as Сообщение;
+\echo '\n Уменьшим значение минимального балла ЕГЭ'
+\echo 'для олимпиад 2-го типа'
 update benefitsforthewinners set minimumegescore=40 where id=2;
 select * from benefitsforthewinners;
 
 -- Запросы из функциональных требований XXXXX XXXXX XX
 /* Справочные операции */
-SELECT 'Запросы из ЛР №1' as Сообщение;
+\echo '\n Запросы из ЛР №1';
 
 /* Функция, выводящая статистику по ЕГЭ */
 /*		в виде двумерного массива varchar по номеру абитуриента */
@@ -72,17 +71,20 @@ LANGUAGE sql;
 /* Вывести краткую информацию об абитуриенте,
 	включая гражданство, сведения о результатах ЕГЭ,
 	ВИПС, олимпиадах */
-SELECT 'Краткая информация об абитуриенте' AS Сообщение;
+\echo '\n Краткая информация об абитуриенте';
 
 SELECT DISTINCT enrollee.id AS "ID", 
 enrollee.name AS "ФИО", 
-(SELECT array_agg(cs.name) FROM enrollee 
+(SELECT array_agg(left(cs.name,3)) FROM enrollee 
 AS enr1 JOIN enrollee2citizenship AS e2c 
 ON enr1.id=e2c.id_enrollee JOIN citizenship AS cs 
-ON e2c.id_citizenship=cs.id WHERE enr1.id=enrollee.id),
-get_enr_ege_stat(enrollee.id) AS "Результаты ЕГЭ",
-get_enr_vips_stat(enrollee.id) AS "Результаты ВИПС", 
-get_enr_olymp_stat(enrollee.id) AS "Победитель олимпиад" 
+ON e2c.id_citizenship=cs.id WHERE enr1.id=enrollee.id)
+as "Гражд.",
+get_enr_ege_stat(enrollee.id) AS "Рез. ЕГЭ",
+get_enr_vips_stat(enrollee.id) AS "Рез. ВИПС", 
+get_enr_olymp_stat(enrollee.id) AS "Рез. олимп", 
+enrollee.achievementpoints as "БИД",
+enrollee.righttopriorityadmission as "П"
 FROM enrollee JOIN enrollee2citizenship 
 ON enrollee.id=enrollee2citizenship.id_enrollee 
 JOIN citizenship 
@@ -91,13 +93,50 @@ WHERE (enrollee.id between 35 and 55)
 OR (enrollee.id between 75 and 80)
 OR (enrollee.id between 130 and 145);	
 
+/* Создадим функцию по выводу информации по абитуриенту. 
+	Она нужна для облегчения отладки */
+create or replace function show_enrollee_by_id(integer)
+returns table (id integer, 
+name varchar(100), 
+citizenships text[], 
+egestat varchar[], 
+vipsstat varchar[], 
+olympstat varchar[], 
+ap smallint, 
+rpa boolean)
+as $$
+SELECT enrollee.id AS "ID", 
+enrollee.name AS "ФИО", 
+(SELECT array_agg(left(cs.name,7)) FROM enrollee 
+AS enr1 JOIN enrollee2citizenship AS e2c 
+ON enr1.id=e2c.id_enrollee JOIN citizenship AS cs 
+ON e2c.id_citizenship=cs.id WHERE enr1.id=enrollee.id),
+get_enr_ege_stat(enrollee.id) AS "Рез. ЕГЭ",
+get_enr_vips_stat(enrollee.id) AS "Рез. ВИПС", 
+get_enr_olymp_stat(enrollee.id) AS "Рез. олимп", 
+enrollee.achievementpoints as "Б.И.Д.",
+enrollee.righttopriorityadmission as "П"
+FROM enrollee JOIN enrollee2citizenship 
+ON enrollee.id=enrollee2citizenship.id_enrollee 
+JOIN citizenship 
+ON enrollee2citizenship.id_citizenship=citizenship.id 
+WHERE enrollee.id=$1;
+$$
+language sql;
+
+/* Протестируем ее работу */
+\echo '\n Тест. show_enrollee_by_id для id=1,2,3'
+select Y.id,Y.name,Y.egestat,Y.ap,Y.rpa 
+from (values (1),(2),(3)) as X, 
+show_enrollee_by_id(X.column1) as Y;
+
 /* Вывести совокупность информации по факультету:
 	доступные образовательные программы с указанием формы и срока
 	обучения, специальности, доступных способов финансирования 
 	с указанием числа мест и способа финансирования */
 	
 /* Выполним такой запрос для факультета №1 */
-SELECT 'Сведения по факультету №1' AS Сообщение;
+\echo '\n Сведения по факультету №1'
 SELECT educationalprogram.speciality_code AS "Код НП", 
 typeofeducation.name AS "Форма обучения",
 typeofeducation.trainingperiod AS "Срок обучения",
@@ -173,13 +212,13 @@ AND paymentmethod2educationalprogram.id_paymentmethod=1;
 $$ language SQL;
 
 /* Попробуем ее запустить */
-SELECT 'Пробуем запустить faculty_info' as Сообщение;
+\echo '\n Пробуем запустить faculty_info'
 SELECT faculty_info(2);
 
 /* Видно, что исчезли названия столбцов.
 	Чтобы это исправить нужно задать их названия и тип данных */
-SELECT 'Задаем названия и тип данных 
-для столбцов при работе с record' as Сообщение;
+\echo '\n Задаем названия и тип данных'
+\echo 'для столбцов при работе с record'
 select * from faculty_info(4) as 
 ("Направление подготовки" varchar(10),
 "Форма обучения" varchar(50),
@@ -193,7 +232,7 @@ select * from faculty_info(4) as
 	факультеты, форма обучения, срок обучения, числа мест 
 	в зависимости от формы оплаты */
 	
-SELECT 'Сведения по коду НП 090301' AS Сообщение;
+\echo 'Сведения по коду НП 090301'
 SELECT faculty.name as "Факультет", 
 typeofeducation.name as "Форма обучения",
 typeofeducation.trainingperiod as "Срок обучения", 
@@ -213,9 +252,8 @@ educationalprogram.id_formofeducation=typeofeducation.id
 where educationalprogram.speciality_code='090301' and pm2ep1.id_paymentmethod=1;
 
 /* Вывести справочную информацию по олимпиадам */
-SELECT 'Справочная информация по олимпиадам' 
-as Сообщение;
-SELECT ol.name AS "Название олимпиады", 
+\echo 'Справочная информация по олимпиадам' 
+SELECT left(ol.name,7) AS "Название олимпиады", 
 bfw.bc AS "Код преимущества", 
 bfw.minimumegescore AS "Минимальный балл ЕГЭ",
 (SELECT count(*) FROM enrollee JOIN receivedcertificate
@@ -227,8 +265,7 @@ FROM
 olympiad as ol join benefitsforthewinners as bfw on bfw.id=ol.idbenefits;
 
 /* Какие направления подготовки соответствуют предмету ВИПС */
-SELECT 'Направления подготовки, соответствующие предмету ВИПС'
-AS Сообщение;
+\echo 'Направления подготовки, соответствующие предмету ВИПС'
 SELECT speciality.speciality_code FROM speciality 
 JOIN subject 
 ON speciality.subject_vips=subject.id 
@@ -247,9 +284,39 @@ WHERE subject2specialityege.speciality_code=$1;
 $$ 
 language SQL;
 
+/* Эксперимент с возвратом ф-ей таблицы 
+	с одним атрибутом*/
+\echo '\n Эксперимент с возвратом ф-ей таблицы'
+SELECT subj_id_list('090301');
+/* С одним атрибутом таблица возвращается нормально */
+
+/* Проведем эксперимент с возвратом 
+	таблицы из 2-х колонок*/
+/* Создадим для этого какую-нибудь функцию */
+CREATE OR REPLACE FUNCTION subj_id_list2(varchar(10))
+RETURNS TABLE(id_subject integer, random integer)
+AS $$
+SELECT subject.id, 5
+FROM subject JOIN subject2specialityege 
+ON subject.id=subject2specialityege.idsubject 
+WHERE subject2specialityege.speciality_code=$1;
+$$ 
+language SQL;
+
+\echo '\n Эксперимент с возвратом ф-ей таблицы с 2-мя атрибутами'
+SELECT subj_id_list2('090301');
+/* Возвращается таблица с одним атрибутом, значения
+	которого - записи */
+
+/* Чтобы исправить данную ошибку, перенесем вызов ф-и
+	в раздел FROM */
+select id_subject, random from subj_id_list2('090301');
+
+/* Удалим ф-ю subj_id_list2 */
+DROP FUNCTION subj_id_list2(varchar(10));/* Теперь все отображается нормально */
+
 /* Пример ее использования */
-SELECT 'Пример использования функции subj_id_list'
-AS Сообщение;
+\echo 'Пример использования функции subj_id_list'
 /* Вывод всех предметов ЕГЭ, соответствующих НП 090301 */
 SELECT subject.name FROM subject 
 WHERE subject.id IN (SELECT subj_id_list('090301'));
@@ -271,24 +338,21 @@ language sql;
 --
 -- Запросы с ORDER BY XXX
 /* Вывести ID студентов, являющихся победителями олимпиад */
-SELECT 'ID студентов победителей олимпиад' 
-AS Сообщение;
+\echo 'ID студентов победителей олимпиад' 
 SELECT DISTINCT enrollee.id 
 FROM enrollee join receivedcertificate 
 ON enrollee.id=receivedcertificate.id_enrollee 
 ORDER BY enrollee.id;
 
 /* Вывести данный список в обратном порядке */
-SELECT 'ID студентов победителей олимпиад (обр. порядок)' 
-AS Сообщение;
+\echo 'ID студентов победителей олимпиад (обр. порядок)' 
 SELECT DISTINCT enrollee.id 
 FROM enrollee join receivedcertificate 
 ON enrollee.id=receivedcertificate.id_enrollee 
 ORDER BY enrollee.id DESC;
 
 /* Добавить столбец с информацией о числе сертификатов */
-SELECT 'Добавлен столбец с информацией о числе сертификатов' 
-AS Сообщение;
+\echo 'Добавлен столбец с информацией о числе сертификатов' 
 SELECT DISTINCT enrollee.id, enrollee.name AS "ФИО", 
 /* Подзапрос в разделе выбора столбцов 
 	c агрегатной функцией count */
@@ -299,18 +363,35 @@ FROM enrollee JOIN receivedcertificate
 ON enrollee.id=receivedcertificate.id_enrollee 
 ORDER BY enrollee.id;
 
+/* Запрос с ORDER BY и датами */
+/* Вывести список всех абитуриентов старше 25 лет 
+	и упорядочить их в порядке убывания возраста */
+/* Ф-я age возвращает тип данных интервал
+	ф-я date_part возвращает число, выделяемое из интервала
+	current_timestamp - текущее время (timestamp) */
+\echo '\n Абитуриенты, которые старше 25 лет'
+SELECT id,name,dob,
+(SELECT 
+date_part('year',
+age(current_timestamp, enrollee.dob::timestamp))) 
+AS AgeInYears 
+FROM enrollee 
+WHERE 
+(select 
+date_part('year',
+age(current_timestamp, enrollee.dob::timestamp)))
+>25 ORDER BY AgeInYears DESC;
+
 
 
 -- Запросы с JOIN XXXXX
-SELECT 'Запросы с JOIN' 
-AS Сообщение;
+\echo 'Запросы с JOIN' 
 /* Вывести количество сертификатов олимпиад
 	для каждого абитуриента с ID от 70 до 80 
 	сперва при помощи inner join 
 	потом left outer join */
-SELECT 'Вывести количество сертификатов олимпиад
-	для каждого абитуриента с ID от 70 до 80 (INNER JOIN)' 
-AS Сообщение;
+\echo 'Вывести количество сертификатов олимпиад'
+\echo 'для каждого абитуриента с ID от 70 до 80 (INNER JOIN)' 
 SELECT DISTINCT enrollee.id, enrollee.name AS "ФИО", 
 (SELECT count(*) FROM enrollee AS enr1 
 JOIN receivedcertificate ON enr1.id=receivedcertificate.id_enrollee 
@@ -320,9 +401,8 @@ ON enrollee.id=receivedcertificate.id_enrollee
 WHERE enrollee.id between 70 and 80 
 ORDER BY enrollee.id;
 
-SELECT 'Вывести количество сертификатов олимпиад
-	для каждого абитуриента с ID от 70 до 80 (LEFT OUTER JOIN)' 
-AS Сообщение;
+\echo 'Вывести количество сертификатов олимпиад'
+\echo 'для каждого абитуриента с ID от 70 до 80 (LEFT OUTER JOIN)' 
 SELECT DISTINCT enrollee.id, enrollee.name AS "ФИО", 
 (SELECT count(*) FROM enrollee AS enr1 
 JOIN receivedcertificate ON enr1.id=receivedcertificate.id_enrollee 
@@ -332,9 +412,8 @@ ON enrollee.id=receivedcertificate.id_enrollee
 WHERE enrollee.id between 70 and 80 
 ORDER BY enrollee.id;
 
-SELECT 'Вывести количество сертификатов олимпиад
-	для каждого абитуриента с ID от 70 до 80 (RIGHT OUTER JOIN)' 
-AS Сообщение;
+\echo 'Вывести количество сертификатов олимпиад'
+\echo 'для каждого абитуриента с ID от 70 до 80 (RIGHT OUTER JOIN)' 
 SELECT DISTINCT enrollee.id, enrollee.name AS "ФИО", 
 (SELECT count(*) FROM enrollee AS enr1 
 JOIN receivedcertificate ON enr1.id=receivedcertificate.id_enrollee 
@@ -348,9 +427,8 @@ ORDER BY enrollee.id;
 /* Определим, сколько среди абитуриентов 
 	граждан каждой из добавленных в БД стран */
 
-SELECT 'Сколько среди абитуриентов 
-граждан каждой из стран (inner join)' 
-AS Сообщение;
+\echo 'Сколько среди абитуриентов'
+\echo 'граждан каждой из стран (inner join)' 
 SELECT DISTINCT citizenship.name, 
 (SELECT count(*) FROM enrollee2citizenship AS e2c 
 WHERE e2c.id_citizenship=citizenship.id) 
@@ -361,9 +439,8 @@ ON citizenship.id=enrollee2citizenship.id_citizenship;
 /* Чтобы определить страну, граждан которой среди
 	абитуриентов нет, воспользуемся right join */
 /* right join <==> right outer join */
-SELECT 'Сколько среди абитуриентов 
-граждан каждой из стран (right join)' 
-AS Сообщение;
+\echo 'Сколько среди абитуриентов'
+\echo 'граждан каждой из стран (right join)' 
 SELECT DISTINCT citizenship.name, 
 (SELECT count(*) FROM enrollee2citizenship AS e2c 
 WHERE e2c.id_citizenship=citizenship.id) FROM enrollee2citizenship 
@@ -372,6 +449,8 @@ ON citizenship.id=enrollee2citizenship.id_citizenship;
 
 /* Какие ЕГЭ нужно сдавать для поступления по определенному
 	направлению подготовки */
+\echo 'Какие ЕГЭ нужно сдавать для поступления по опр.'
+\echo 'напр. подготовки'
 SELECT subject.name 
 FROM subject JOIN subject2specialityege 
 ON subject.id=subject2specialityege.idsubject 
@@ -381,7 +460,7 @@ WHERE subject2specialityege.speciality_code='180301';
 
 /* Вычислить средний балл абитуриента по ЕГЭ,
 	если он его сдавал, для первых 10 абитуриентов */
-SELECT 'Средний балл ЕГЭ для первых десятерых' AS Сообщение;
+\echo 'Средний балл ЕГЭ для первых десятерых'
 SELECT DISTINCT enrollee.id, enrollee.name, 
 get_enr_ege_stat(enrollee.id), 
 (SELECT avg(pege.score) FROM passedege AS pege 
@@ -391,6 +470,7 @@ WHERE enrollee.id between 1 and 10;
 
 
 /* Вычислить минимальный средний балл абитуриента по ЕГЭ */
+/* Сообщение при помощи SQL */
 SELECT 'Минимальный средний балл ЕГЭ' AS Сообщение;
 SELECT min(allavgege.avgege) FROM
 (SELECT 
@@ -400,7 +480,7 @@ JOIN passedege ON enrollee.id=passedege.id_enrollee) as allavgege;
 
 /* Показать абитуриентов, у которых средний балл по ЕГЭ 
 	меньше 45 и указать их баллы */
-SELECT 'Абитуриенты со средним баллом по ЕГЭ меньшим 45' AS Сообщение;
+\echo 'Абитуриенты со средним баллом по ЕГЭ меньшим 45'
 SELECT DISTINCT tabwithavgege.id, tabwithavgege.name, tabwithavgege.avgege, 
 get_enr_ege_stat(tabwithavgege.id) FROM
 (SELECT enrollee.id AS id, enrollee.name AS name,
@@ -410,7 +490,7 @@ JOIN passedege ON enrollee.id=passedege.id_enrollee) as tabwithavgege
 WHERE tabwithavgege.avgege<45;
 
 /* Показать абитуриента с самым низким средним баллом по ЕГЭ */
-SELECT 'Абитуриент с самым низким средним баллом по ЕГЭ' AS Сообщение;
+\echo 'Абитуриент с самым низким средним баллом по ЕГЭ'
 SELECT  DISTINCT tabwithavgege.id, tabwithavgege.name, tabwithavgege.avgege FROM
 (SELECT enrollee.id as id, enrollee.name as name,
 (SELECT avg(pege.score) FROM passedege AS pege 
@@ -424,7 +504,7 @@ WHERE pege1.id_enrollee=enrollee.id) as avgege1 FROM enrollee
 JOIN passedege ON enrollee.id=passedege.id_enrollee) as allavgege1);
 
 /* Показать абитуриентов, которые сдали больше 3 ЕГЭ */
-SELECT 'Абитуриенты, которые сдали больше 3 ЕГЭ' as Сообщение;
+\echo 'Абитуриенты, которые сдали больше 3 ЕГЭ'
 SELECT tab_enr_npe.id, tab_enr_npe.name, tab_enr_npe.npe 
 as "Число сданных ЕГЭ" 
 FROM
@@ -440,18 +520,15 @@ WHERE tab_enr_npe.npe>3;
 
 
 -- Запросы с LIKE XX
-SELECT 'Запросы с LIKE' 
-AS Сообщение;
+\echo 'Запросы с LIKE' 
 /* Вывести фамилию и дату рождения всех абитуриентов */
 /* 	в ФИО которых содержится строка 'нар' */
-SELECT 'Абитуриенты, в ФИО которых есть строка "нар"' 
-AS Сообщение;
+\echo 'Абитуриенты, в ФИО которых есть строка "нар"' 
 SELECT name,dob
 FROM enrollee WHERE name LIKE '%нар%';
 
 /* Вывести также гражданство таких абитуриентов */
-SELECT 'Вывести также гражданство таких абитуриентов' 
-AS Сообщение;
+\echo 'Вывести также гражданство таких абитуриентов' 
 /* По умолчанию подразумевается inner join */
 /* При наличии LEFT, RIGHT, FULL - outer join */
 SELECT enrollee.name,enrollee.dob,citizenship.name 
@@ -462,25 +539,56 @@ JOIN citizenship
 ON citizenship.id=enrollee2citizenship.id_citizenship  
 WHERE enrollee.name LIKE '%нар%';
 
+-- Запросы с GROUP BY
+/* Сколько граждан каждой из стран среди абитуриентов? */
+\echo '\n Запросы с GROUP BY'
+
+\echo '\n Распределение абитуриентов по гражданству'
+SELECT c.name, count(*) 
+/* в разделе выбора столбцов 
+	при применении GROUP BY
+	столбцы, не указанные в GROUP BY
+	можно использовать ТОЛЬКО в агрегатных функциях */
+from enrollee2citizenship as e2c 
+join citizenship as c 
+on e2c.id_citizenship=c.id 
+group by c.name 
+order by c.name;
+
+/* Фильтрация групп при помощи HAVING */
+\echo '\n Фильтрация групп при помощи HAVING'
+
+\echo '\n Распределение абитуриентов по гражданству'
+\echo 'по странам, где число абитуриентов >10';
+SELECT c.name, count(*)
+from enrollee2citizenship as e2c 
+join citizenship as c 
+on e2c.id_citizenship=c.id 
+group by c.name
+having count(*)>10
+order by c.name;
+
+
+
 -- Прочие запросы XXX
 /* Пример использования CASE и VALUES */
-SELECT 'Пример использования CASE и VALUES' 
-AS Сообщение;
+\echo 'Пример использования CASE и VALUES' 
 SELECT 
 (CASE WHEN column1>0 THEN 'q' ELSE '-q' END) 
 FROM (VALUES (10),(-10),(20),(-20)) AS t1;
 
 /* Получить первые 10 строк таблицы 
 	при помощи LIMIT */
-SELECT 'Получить первые 10 строк таблицы (LIMIT)'
-AS Сообщение;
-SELECT * FROM enrollee LIMIT 10;	
+\echo 'Получить первые 10 строк таблицы (LIMIT)'
+SELECT enrollee.id,enrollee.name FROM enrollee LIMIT 10;	
 
 /* Получить первые 10 строк таблицы 
 	при помощи FETCH */
-SELECT 'Получить первые 10 строк таблицы (FETCH)'
-AS Сообщение;
-SELECT * FROM enrollee FETCH FIRST 10 ROWS ONLY;
+\echo 'Получить первые 10 строк таблицы (FETCH)'
+SELECT enrollee.id,enrollee.name FROM enrollee FETCH FIRST 10 ROWS ONLY;
+
+
+
 
 
 \q
