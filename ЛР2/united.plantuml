@@ -294,7 +294,7 @@ Faculty ||--|{ PaymentMethod2EducationalProgram
 OlympiadCertificate2Speciality }|--||  Speciality
 OlympiadCertificate }o-left-|| Subject
 OlympiadCertificate ||--|{ OlympiadCertificate2Speciality
-OlympiadCertificate }o--|| Subject
+'OlympiadCertificate }o--|| Subject
 Olympiad ||--o{ OlympiadCertificate
 PassedEGE }o--|| Subject
 PassedVIPS }o--|| Subject
