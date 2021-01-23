@@ -1,0 +1,74 @@
+@startuml
+'left to right direction
+top to bottom direction
+
+class AuthForm 
+note right: Окно авторизации
+
+class MainForm 
+note right: Главное окно
+
+interface db_connection_iface{
++  connection_result connect(String na, String port, 
+String user, String password, String dbname);
++  connection_result disconnect();
++  query_result sql_function(String query,String[] atr);
++  query_result sql_function_single(String query,String atr);
++  boolean sql_procedure(String query);
+}
+class SpecialityForm
+class query_result{
+	- boolean res;
+	- ArrayList<String> ls;
+	+  query_result(boolean flag, ArrayList<String> list)
+	+  boolean get_result() 
+	+  ArrayList<String> get_list() 
+	+  String get_string()
+}
+class pgsql_db_connection
+class java.sql.Connection
+class java.sql.Statement
+class java.sql.ResultSet
+
+class connection_result{
+	-  boolean result;
+	-  String message;
+	+ connection_result(boolean r, String m)
+	+ boolean get_result() 
+	+ String get_message()
+}
+
+AuthForm ..> connection_result
+connection_result ..> db_connection_iface
+
+class dbapp
+note right: Главная программа
+
+interface db_proc_iface
+note right: Инт. для пост-обр-и д-х
+
+dbapp *-- AuthForm
+dbapp *-- MainForm
+
+AuthForm --> MainForm
+AuthForm o-- db_connection_iface
+
+MainForm o-- db_connection_iface
+MainForm *-- SpecialityForm
+
+SpecialityForm o-- db_connection_iface
+SpecialityForm ..|> db_proc_iface
+
+query_result ..> db_connection_iface
+query_result <..  db_proc_iface
+
+pgsql_db_connection ..|> db_connection_iface
+pgsql_db_connection *-- java.sql.Connection
+pgsql_db_connection *-- java.sql.Statement
+pgsql_db_connection *-- java.sql.ResultSet
+
+skinparam linestyle ortho
+
+
+
+@enduml
