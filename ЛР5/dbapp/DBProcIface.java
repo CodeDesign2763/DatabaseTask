@@ -2,9 +2,14 @@
  * Учебное задание по дисциплине БД
  * Программа для взаимодействия с БД из ЛР5
  * 
- * Класс query_result
- * Используется для хранения данных, возвращаемых
- * при помощи методов интерфейса db_connection_iface
+ * Интерфейс DBProcIface
+ * 
+ * Вспомогательный интерфейс для обработки данных
+ * полученных от БД
+ * 
+ * Версия 1
+ * 
+ * 20.01.2021
  * 
  * (C) 2021 by Alexander Chernokrylov <CodeDesign2763@gmail.com>
  *
@@ -25,23 +30,27 @@
  * MA 02110-1301, USA.
  * 
  */
+ 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
-import java.util.ArrayList;
-class query_result{
-	private boolean res;
-	private ArrayList<String> ls;
-	public query_result(boolean flag, ArrayList<String> list)
+interface DBProcIface {
+	public default void fillListWQueryResults(QueryResult qr, 
+	DefaultListModel<String> dlm)
 	{
-		ls=list;
-		res=flag;
+		dlm.clear();
+		for (String str : qr.getList()) {
+			dlm.addElement(str);
+		}
 	}
-	public boolean get_result() {
-		return res;
+	public default void fillComboBoxWQueryResults(QueryResult qr, 
+	DefaultComboBoxModel<String> dcbm)
+	{
+		dcbm.removeAllElements();
+		for (String str : qr.getList()) {
+			dcbm.addElement(str);
+		}
 	}
-	public ArrayList<String> get_list() {
-		return ls;
-	}
-	public String get_string() {
-		return ls.get(0);
-	}
+
 }

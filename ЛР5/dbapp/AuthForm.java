@@ -47,91 +47,91 @@ import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
  
-class AuthForm extends JFrame implements ActionListener 
-{
-	private JPanel centralpanel;
-	private JTextField UserField=new JTextField(30);
-	private JPasswordField PasswordField=new JPasswordField(30);
-	private JTextField DBServerNAField=new JTextField(30);
-	private JTextField DBServerPField=new JTextField(30);
-	private JButton ConnectButton = new JButton("Подключиться");
-	private JLabel ConnectionResult = new JLabel("Нет подключения");
-	private JButton NextButton = new JButton("Далее");
-	private db_connection_iface db_con=new pgsql_db_connection();
-	private MainForm mainform_pointer;
+class AuthForm extends JFrame implements ActionListener {
+	/* Элементы графического интерфейса */
+	private JPanel centralPanel;
+	private JTextField userField=new JTextField(30);
+	private JPasswordField passwordField=new JPasswordField(30);
+	private JTextField dbServerNAField=new JTextField(30);
+	private JTextField dbServerPField=new JTextField(30);
+	private JButton connectButton = new JButton("Подключиться");
+	private JLabel output = new JLabel("Нет подключения");
+	private JButton nextButton = new JButton("Далее");
+	/* Интерфейс для соединения с БД */
+	private DBConnectionIface dbCon=new PGSQLDBConnection();
+	/* Указатель на главное окно */
+	private MainForm mainFormPointer;
 	
 	public void setMainFormPointer(MainForm mfp)	{
-		this.mainform_pointer=mfp;
+		this.mainFormPointer=mfp;
 	}
 	
-	public db_connection_iface get_db_connection() {
-		return this.db_con;
+	public DBConnectionIface get_dbConnection() {
+		return this.dbCon;
 	}
 	
 	@Override
-	public void actionPerformed(ActionEvent e)
-	{
-		connection_result res1;
-		if (e.getSource()==ConnectButton) 
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource()==connectButton) 
 		{
-			res1=db_con.connect(DBServerNAField.getText(),
-			DBServerPField.getText(), 
-			UserField.getText(),
-			new String(PasswordField.getPassword()),
-			"admission_office");
-
-			if (res1.get_result()) 
-			{
-				ConnectionResult.setText(
+			String pw=new String(passwordField.getPassword());
+			
+			/* Если данные для подключения верные 
+			 * то запомнить их и использовать в дальнейшем
+			 * для подключения И разрешить доступ 
+			 * к главному окну 
+			 */
+			if (dbCon.checkConnection(dbServerNAField.getText(),dbServerPField.getText(),userField.getText(),pw,"admission_office").getResult()) {
+				nextButton.setEnabled(true);
+				connectButton.setEnabled(false);
+				output.setText(
 				"Вы успешно подключились к БД!");
-				NextButton.setEnabled(true);
-				ConnectButton.setEnabled(false);
 			}
-			else
-			{
-				ConnectionResult.setText(
-				"Ошибка при подключении к БД!");
-				db_con.disconnect();
-			}
+			else 
+				output.setText(
+				"Ошибка при подключении к БД");
+			pw="";
 		}
 		else
-		if (e.getSource()==NextButton)  
+		if (e.getSource()==nextButton)  
 		{
-			mainform_pointer.setVisible(true);
-			mainform_pointer.setDBcon(db_con);
+			mainFormPointer.setVisible(true);
+			mainFormPointer.setDBcon(dbCon);
 			this.setVisible(false);
+			/* Уничтожение формы */
+			this.dispose();
 		}
 	}
 	
-	public AuthForm(String title)
-	{
+	public AuthForm(String title) {
+		/* Настройка внешнего вида окна */
 		setTitle(title);
-		centralpanel=new JPanel(new GridLayout(7,1,10,10));
-		centralpanel.setBorder(
+		centralPanel=new JPanel(new GridLayout(7,1,10,10));
+		centralPanel.setBorder(
 		BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		UserField.setBorder(
+		userField.setBorder(
 		BorderFactory.createTitledBorder("Имя пользователя БД"));
-		PasswordField.setBorder(
+		passwordField.setBorder(
 		BorderFactory.createTitledBorder("Пароль"));
-		DBServerNAField.setBorder(
+		dbServerNAField.setBorder(
 		BorderFactory.createTitledBorder("Адрес сервера"));
-		DBServerPField.setBorder(
+		dbServerPField.setBorder(
 		BorderFactory.createTitledBorder("Порт"));
-		ConnectionResult.setBorder(
+		output.setBorder(
 		BorderFactory.createTitledBorder("Результат подключения"));
-		centralpanel.add(UserField);
-		centralpanel.add(PasswordField);
-		centralpanel.add(DBServerNAField);
-		centralpanel.add(DBServerPField);
-		centralpanel.add(ConnectButton);
-		centralpanel.add(ConnectionResult);
-		centralpanel.add(NextButton);
-		add(centralpanel);
-		NextButton.setEnabled(false);
+		centralPanel.add(userField);
+		centralPanel.add(passwordField);
+		centralPanel.add(dbServerNAField);
+		centralPanel.add(dbServerPField);
+		centralPanel.add(connectButton);
+		centralPanel.add(output);
+		centralPanel.add(nextButton);
+		add(centralPanel);
+		nextButton.setEnabled(false);
 		
 		/* Настройка обработчиков событий кнопок */
-		ConnectButton.addActionListener(this);
-		NextButton.addActionListener(this);
+		connectButton.addActionListener(this);
+		nextButton.addActionListener(this);
 		
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		
@@ -144,7 +144,7 @@ class AuthForm extends JFrame implements ActionListener
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				db_con.disconnect();
+				dbCon.disconnect();
 				System.exit(0);
 			}
 		});

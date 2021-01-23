@@ -2,13 +2,9 @@
  * Учебное задание по дисциплине БД
  * Программа для взаимодействия с БД из ЛР5
  * 
- * Класс connection_result
- * 
- * Используется для хранения информации о ходе авторизации
- * 
- * Версия 1
- * 
- * 20.01.2021
+ * Класс QueryResult
+ * Используется для хранения данных, возвращаемых
+ * при помощи методов интерфейса db_connection_iface
  * 
  * (C) 2021 by Alexander Chernokrylov <CodeDesign2763@gmail.com>
  *
@@ -29,19 +25,39 @@
  * MA 02110-1301, USA.
  * 
  */
- 
-class connection_result{
-	private boolean result;
+
+import java.util.ArrayList;
+class QueryResult{
+	private boolean res;
+	private ArrayList<String> ls;
+	Speciality spec;
 	private String message;
-	public connection_result(boolean r, String m)
+	
+	public QueryResult(boolean flag, ArrayList<String> list, Speciality pointer,String msg)
 	{
-		result=r;
-		message=m;
+		ls=list;
+		res=flag;
+		spec=pointer;
+		message=msg;
 	}
-	public boolean get_result() {
-		return result;
+	
+	public boolean getResult() {
+		return res;
 	}
-	public String get_message() {
+	public ArrayList<String> getList() {
+		return ls;
+	}
+	public String getString() {
+		return ls.get(0);
+	}
+	public int getInt() {
+		return Integer.valueOf(ls.get(0));
+	}
+	
+	public Speciality getSpec() {
+		return spec;
+	}
+	public String getMessage() {
 		return message;
 	}
 }

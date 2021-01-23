@@ -2,10 +2,9 @@
  * Учебное задание по дисциплине БД
  * Программа для взаимодействия с БД из ЛР5
  * 
- * Интерфейс db_proc_iface
+ * Класс Speciality
  * 
- * Вспомогательный интерфейс для обработки данных
- * полученных от БД
+ * Используется для хранения информации о ходе подключения к БД
  * 
  * Версия 1
  * 
@@ -30,27 +29,23 @@
  * MA 02110-1301, USA.
  * 
  */
- 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-
-interface db_proc_iface {
-	public default void fill_list_w_qr(query_result qr, 
-	DefaultListModel<String> dlm)
-	{
-		dlm.clear();
-		for (String str : qr.get_list()) {
-			dlm.addElement(str);
-		}
+class Speciality {
+	private String specialityCode;
+	private int subjectVips;
+	private String name;
+	public String getSpecialityCode() {
+		return specialityCode;
 	}
-	public default void fill_combobox_w_qr(query_result qr, 
-	DefaultComboBoxModel<String> dcbm)
-	{
-		dcbm.removeAllElements();
-		for (String str : qr.get_list()) {
-			dcbm.addElement(str);
-		}
+	public int getSubjectVips() {
+		return subjectVips;
 	}
-
+	public String getName() {
+		return name;
+	}
+	public Speciality(String sc, int sv, String n) {
+		specialityCode=sc;
+		subjectVips=sv;
+		name=n;
+	}
 }
+

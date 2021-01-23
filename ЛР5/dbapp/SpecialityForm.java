@@ -4,6 +4,8 @@
  * 
  * Класс SpecialityForm
  * 
+ * Предназначен для работы с сущностью Speciality из БД
+ * 
  * Версия 1
  * 
  * 20.01.2021
@@ -35,293 +37,267 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
  
 class SpecialityForm extends JFrame 
-implements ActionListener, db_proc_iface, ListSelectionListener
+implements ActionListener, DBProcIface, ListSelectionListener
 {
-	private JPanel centralpanel;
-	private JPanel horpanel1;
-	private JPanel horpanel2;
-	private JPanel verpanel1;
-	private DefaultListModel<String> SpecListData=
+	private JPanel centralPanel;
+	private JPanel horPanel1;
+	private JPanel horPanel2;
+	private JPanel verPanel1;
+	
+	private DefaultListModel<String> specListData=
 	new DefaultListModel<String>();
 	
-	private JList<String> SpecList = new JList<String>(SpecListData);
-	private JButton AddButton = new JButton("Добавить");
-	private JButton ChangeButton = new JButton("Изменить");
-	private JButton DeleteButton = new JButton("Удалить");
-	private JButton OKButton= new JButton("ОК");;
+	private JList<String> specList = new JList<String>(specListData);
+	private JScrollPane specListScroll;
 	
-	private DefaultComboBoxModel<String> SubjListData=
+	private JButton addButton = new JButton("Добавить");
+	private JButton changeButton = new JButton("Изменить");
+	private JButton deleteButton = new JButton("Удалить");
+	private JButton okButton= new JButton("ОК");;
+	
+	private DefaultComboBoxModel<String> subjListData=
 	new DefaultComboBoxModel<String>();
-	private JComboBox<String> SubjList=
-	new JComboBox<String>(SubjListData);
+	private JComboBox<String> subjList=
+	new JComboBox<String>(subjListData);
 	
-	private JTextField SpecName=new JTextField(50);
-	private JTextField SpecCode=new JTextField(10);
-	private JTextArea Output= new JTextArea();
-	private JScrollPane SpecListScroll;
-	private db_connection_iface db_con;
+	private JTextField specName=new JTextField(50);
+	private JTextField specCode=new JTextField(10);
+	
+	private JTextArea output= new JTextArea();
+	private JScrollPane outputScroll;
+	
+	
+	private DBConnectionIface dbCon;
+	
+	private void printMessage(String s) {
+		output.setText(output.getText()+"\n"+s);
+	}
 	
 	public void valueChanged(ListSelectionEvent e) {
 		/* Обязательно нужно делать проверку getSelectedValue()!=null
 		 * если в дальнейшем используется метод toString()
 		 * иначе может быть nullpointexception
 		 */
-		if ((e.getSource()==SpecList) 
-		&& (SpecList.getSelectedValue()!=null))
+		Speciality spec;
+		QueryResult qr;
+		if ((e.getSource()==specList) 
+		&& (specList.getSelectedValue()!=null))
 		{
-			SpecCode.setText(SpecList.getSelectedValue());
-			SpecName.setText(db_con.sql_function_single(
-			"SELECT name FROM speciality WHERE speciality_code='"
-			+SpecList.getSelectedValue().toString().trim()
-			+"';","name").get_string());
-			SubjList.setSelectedItem(db_con.sql_function_single(
-			"select subject.name from speciality join subject"
-			+" on subject.id=speciality.subject_vips "
-			+"where speciality.speciality_code='"
-			+SpecList.getSelectedValue().toString().trim()
-			+"';","name").get_string());
-			ChangeButton.setEnabled(true);
-			DeleteButton.setEnabled(true);
+			qr=dbCon.getSpecialityByCode(specList.getSelectedValue().toString().trim());
+			if (qr.getResult()) {
+				printMessage("Запись из Speciality получена успешно");
+				specCode.setText(qr.getSpec().getSpecialityCode());
+				specName.setText(qr.getSpec().getName());
+				subjList.setSelectedItem(String.valueOf(qr.getSpec().getSubjectVips()));
+			}
+			else 
+				printMessage("Ошибка при получении записи из Speciality");
+
+			changeButton.setEnabled(true);
+			deleteButton.setEnabled(true);
 		}
     }
 	
-	public void setDBcon(db_connection_iface dbc)
+	public void setDBcon(DBConnectionIface dbc)
 	{
-		this.db_con=dbc;
+		this.dbCon=dbc;
 	} 
 	
 	public void reset() {
-		SpecList.clearSelection();
-		SpecList.setEnabled(false);
-		SpecListData.removeAllElements();
-		String[] atr_array={"speciality_code"};
-		query_result qr1;
-		qr1=db_con.sql_function("select * from speciality;",
-		atr_array);
+		specList.clearSelection();
+		specList.setEnabled(false);
+		specListData.removeAllElements();
 		
-		fill_list_w_qr(qr1,SpecListData);
-		if (qr1.get_result()) 
-			Output.setText(
-			"Чтение БД успешно (список НП)"+"\n"+Output.getText());
-		else
-			Output.setText(
-			"Ошибка при чтении БД (список НП)"+"\n"+Output.getText());
+		/* Получение списка НП */
+		QueryResult qr;
+		qr=dbCon.getSpecialityCodeList();
+		if (qr.getResult()) {
+			printMessage("Список НП успешно получен");
+			fillListWQueryResults(qr,specListData);
+		}
+		else 
+			printMessage("Ошибка при получении списка НП");
 		
-		fill_combobox_w_qr(db_con.sql_function_single(
-		"select distinct subject.name from speciality"
-		+" join subject on subject.id=speciality.subject_vips;",
-		"name"),SubjListData);
+		/* Получение списка предметов ВИПС */
+		qr=dbCon.getSubjectNameList();
+		if (qr.getResult()) {
+			printMessage("Список предметов успешно получен");
+			fillComboBoxWQueryResults(qr,subjListData);
+		}
+		else 
+			printMessage("Ошибка при получении списка предметов");
+ 		
+		specName.setText("");
+		specName.setEnabled(false);
 		
-		SpecName.setText("");
-		SpecName.setEnabled(false);
-		SpecCode.setText("");
-		SpecCode.setEnabled(false);
-		SubjList.setEnabled(false);
-		SubjList.setSelectedItem("");
-		OKButton.setEnabled(false);
-		SpecList.setEnabled(true);
+		specCode.setText("");
+		specCode.setEnabled(false);
 		
+		subjList.setEnabled(false);
+		subjList.setSelectedItem("");
+		specList.setEnabled(true);
+		
+		okButton.setEnabled(false);
+		addButton.setEnabled(true);
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		if (e.getSource()==AddButton)
-		{
+		if (e.getSource()==addButton) {
 			reset();
 			
-			SpecCode.setEnabled(true);
-			OKButton.setEnabled(true);
-			SubjList.setEnabled(true);
-			SpecName.setEnabled(true);
-			OKButton.setActionCommand("add");
+			specCode.setEnabled(true);
+			okButton.setEnabled(true);
+			subjList.setEnabled(true);
+			specName.setEnabled(true);
+			okButton.setActionCommand("add");
 			
-			AddButton.setEnabled(false);
-			ChangeButton.setEnabled(false);
-			DeleteButton.setEnabled(false);
-			
+			addButton.setEnabled(false);
+			changeButton.setEnabled(false);
+			deleteButton.setEnabled(false);
 		}
-		if (e.getSource()==ChangeButton)
+		if (e.getSource()==changeButton) {
+			specCode.setEnabled(true);
+			okButton.setEnabled(true);
+			subjList.setEnabled(true);
+			specName.setEnabled(true);
+			okButton.setActionCommand("change");
+			
+			addButton.setEnabled(false);
+			changeButton.setEnabled(false);
+			deleteButton.setEnabled(false);
+		}
+		if (e.getSource()==deleteButton)
 		{
 			
-			SpecCode.setEnabled(true);
-			OKButton.setEnabled(true);
-			SubjList.setEnabled(true);
-			SpecName.setEnabled(true);
-			OKButton.setActionCommand("change");
+			okButton.setEnabled(true);
+			okButton.setActionCommand("delete");
 			
-			AddButton.setEnabled(false);
-			ChangeButton.setEnabled(false);
-			DeleteButton.setEnabled(false);
+			addButton.setEnabled(false);
+			changeButton.setEnabled(false);
+			deleteButton.setEnabled(false);
 		}
-		if (e.getSource()==DeleteButton)
-		{
-			
-			OKButton.setEnabled(true);
-			OKButton.setActionCommand("delete");
-			
-			AddButton.setEnabled(false);
-			ChangeButton.setEnabled(false);
-			DeleteButton.setEnabled(false);
-		}
-		if (e.getSource()==OKButton)
+		if (e.getSource()==okButton)
 		{
 			if (e.getActionCommand().equals("add"))
 			{
-				query_result qr_id =
-				db_con.sql_function_single(
-				"select id from subject where subject.name='"
-				+SubjList.getSelectedItem().toString()+"';","id");
-				Output.setText("insert into speciality values('"
-				+SpecCode.getText()+"',"+qr_id.get_string()
-				+",'"+SpecName.getText()+"');");
-				
-				if (db_con.sql_procedure(
-				"insert into speciality values('"
-				+SpecCode.getText()+"',"+qr_id.get_string()
-				+",'"+SpecName.getText()+"');"))
-					Output.setText("Запись успешно добавлена\n"
-					+Output.getText());
-				else 
-					Output.setText(
-					"Ошибка при добавлении записи\n"
-					+Output.getText());
-				
-				OKButton.setEnabled(false);
-				SpecName.setEnabled(false);
-				SpecCode.setEnabled(false);
-				SubjList.setEnabled(false);
-				ChangeButton.setEnabled(false);
-				DeleteButton.setEnabled(false);
-				reset();
-			}
+				/* Обязательно нужно делать проверку
+				 * .getSelectedItem()!=null
+				 */
+				if (subjList.getSelectedItem()!=null) {
+					/* Определим id предмета ВИПС */
+					QueryResult qr1=dbCon.getSubjectIDByName(subjList.getSelectedItem().toString());
+					if (qr1.getResult()) {
+						printMessage("ID предмета определен успешно");
+						if (dbCon.addSpeciality(new Speciality(specCode.getText(),qr1.getInt(),specName.getText())))
+							printMessage("Новая запись успешно добавлена");
+						else
+							printMessage("Ошибка при добавлении новой записи");
+					} else {
+						printMessage("Ошибка при определении ID предмета");
+					}
+				} else {
+					printMessage("Ошибка! Не выбран предмет ВИПС");
+				}
+			} 
+			
 			if (e.getActionCommand().equals("change") 
-			&& (SpecList.getSelectedValue()!=null))
-			{
-				if (db_con.sql_procedure(
-				"delete from speciality where speciality_code='"
-				+SpecList.getSelectedValue().toString().trim()+"';"))
-					Output.setText("Запись успешно удалена\n"
-					+Output.getText());
-				else
-					Output.setText(
-					"Ошибка при удалении записи\n"
-					+Output.getText());
+			&& (specList.getSelectedValue()!=null)) {
 				
-					//Output.setText("\n"+Output.getText());
-				
-				query_result qr_id =
-				db_con.sql_function_single(
-				"select id from subject where subject.name='"
-				+SubjList.getSelectedItem().toString()+"';","id");
-				
-				if (db_con.sql_procedure(
-				"insert into speciality values('"
-				+SpecCode.getText().trim()+"',"+qr_id.get_string()
-				+",'"+SpecName.getText()+"');"))
-					Output.setText("Запись успешно добавлена\n"
-					+Output.getText());
-				else 
-					Output.setText(
-					"Ошибка при добавлении записи\n"
-					+Output.getText());
-				OKButton.setEnabled(false);
-				SpecName.setEnabled(false);
-				SpecCode.setEnabled(false);
-				SubjList.setEnabled(false);
-				ChangeButton.setEnabled(false);
-				DeleteButton.setEnabled(false);
-				reset();
+				if (subjList.getSelectedItem()!=null) {
+					/* Определим id предмета ВИПС */
+					QueryResult qr1=dbCon.getSubjectIDByName(subjList.getSelectedItem().toString());
+					if (qr1.getResult()) {
+						printMessage("ID предмета определен успешно");
+						if (dbCon.updateSpecialityByCode(specList.getSelectedValue().toString(), new Speciality(specCode.getText(),qr1.getInt(),specName.getText())))
+							printMessage("Запись успешно отредактирована");
+						else
+							printMessage("Ошибка при редактировании записи");
+					} else {
+						printMessage("Ошибка при определении ID предмета");
+					}
+				} else {
+					printMessage("Ошибка! Не выбран предмет ВИПС");
+				}
 			}
 			
 			if (e.getActionCommand().equals("delete") 
-			&& (SpecList.getSelectedValue()!=null))
-			{
-				Output.setText(
-				"delete from speciality where speciality_code='"
-				+SpecList.getSelectedValue().toString().trim()+"';");
-					Output.setText("Запись успешно удалена\n"
-					+Output.getText());
-				if (db_con.sql_procedure(
-				"delete from speciality where speciality_code='"
-				+SpecList.getSelectedValue().toString().trim()+"';"))
-					Output.setText("Запись успешно удалена\n"
-					+Output.getText());
-				else
-					Output.setText(
-					"Ошибка при удалении записи\n"
-					+Output.getText());
-				
-				OKButton.setEnabled(false);
-				SpecName.setEnabled(false);
-				SpecCode.setEnabled(false);
-				SubjList.setEnabled(false);
-				ChangeButton.setEnabled(false);
-				DeleteButton.setEnabled(false);
-				reset();
+			&& (specList.getSelectedValue()!=null)) {
+				if (dbCon.deleteSpecialityByCode(specList.getSelectedValue().toString())) 
+					printMessage("Запись удалена успешно");
+				else 
+					printMessage("Ошибка при удалении записи");
 			}
-			AddButton.setEnabled(true);
+			
+			okButton.setEnabled(false);
+			specName.setEnabled(false);
+			specCode.setEnabled(false);
+			subjList.setEnabled(false);
+			changeButton.setEnabled(false);
+			deleteButton.setEnabled(false);
+			reset();
 		}
 	}
 	
-	public SpecialityForm(String title, db_connection_iface dbc)
+	public SpecialityForm(String title,DBConnectionIface dbc)
 	{
 		//Configuring the graphical interface
-		db_con=dbc;
+		dbCon=dbc;
 		setTitle(title);
-		centralpanel=new JPanel();
-		centralpanel.setLayout(new BoxLayout(centralpanel,
+		centralPanel=new JPanel();
+		centralPanel.setLayout(new BoxLayout(centralPanel,
 		BoxLayout.Y_AXIS));
-		horpanel1=new JPanel(new FlowLayout());
-		verpanel1=new JPanel(new GridLayout(3,1,10,10));
-		horpanel2=new JPanel(new FlowLayout());
-		/* horpanel1 */
+		horPanel1=new JPanel(new FlowLayout());
+		verPanel1=new JPanel(new GridLayout(3,1,10,10));
+		horPanel2=new JPanel(new FlowLayout());
 		
-		SpecListScroll=new JScrollPane(SpecList);
-		SpecListScroll.setPreferredSize(new Dimension(300, 200));
+		/* horPanel1 */
 		
-		horpanel1.add(SpecListScroll);
-		/* verpanel1 */
-		SpecName.setBorder(
+		specListScroll=new JScrollPane(specList);
+		specListScroll.setPreferredSize(new Dimension(300, 200));
+		
+		horPanel1.add(specListScroll);
+		/* verPanel1 */
+		specName.setBorder(
 		BorderFactory.createTitledBorder("Название НП"));
-		verpanel1.add(SpecName);
-		SubjList.setBorder(
+		verPanel1.add(specName);
+		subjList.setBorder(
 		BorderFactory.createTitledBorder("Предмет ВИПС"));
-		verpanel1.add(SubjList);
-		SpecCode.setBorder(
+		verPanel1.add(subjList);
+		specCode.setBorder(
 		BorderFactory.createTitledBorder("Код НП"));
+		verPanel1.add(specCode);
 		
-		verpanel1.add(SpecCode);
+		horPanel1.add(verPanel1);
+		centralPanel.add(horPanel1);
 		
-		horpanel1.add(verpanel1);
-		centralpanel.add(horpanel1);
+		/* horPanel2 */
+		horPanel2.add(addButton);
+		horPanel2.add(changeButton);
+		horPanel2.add(deleteButton);
+		horPanel2.add(okButton);
+		centralPanel.add(horPanel2);
 		
-		/* horpanel2 */
-		horpanel2.add(AddButton);
-		//AddButton.setPreferredSize(new Dimension(10,10));
-		horpanel2.add(ChangeButton);
-		horpanel2.add(DeleteButton);
-		horpanel2.add(OKButton);
-		centralpanel.add(horpanel2);
 		/* output */
-		Output.setBorder(
+		outputScroll=new JScrollPane(output);
+		output.setBorder(
 		BorderFactory.createTitledBorder("Результат операций"));
-		centralpanel.add(Output);
-		Output.setPreferredSize(new Dimension(200,100));
-		centralpanel.setBorder(
+		centralPanel.add(outputScroll);
+		outputScroll.setPreferredSize(new Dimension(200,300));
+		centralPanel.setBorder(
 		BorderFactory.createEmptyBorder(10,10,10,10));
 		
-		add(centralpanel);
+		add(centralPanel);
     
-    	SpecList.addListSelectionListener(this);
-    	AddButton.addActionListener(this);
-    	OKButton.addActionListener(this);
-    	ChangeButton.addActionListener(this);
-    	DeleteButton.addActionListener(this);
+		/* Настройка обработчиков событий */
+    	specList.addListSelectionListener(this);
+    	addButton.addActionListener(this);
+    	okButton.addActionListener(this);
+    	changeButton.addActionListener(this);
+    	deleteButton.addActionListener(this);
 
 		
-		//Picture for the dialog box
-		//win_icon = new ImageIcon("win.png");
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		pack();
 		setResizable(false);
@@ -329,10 +305,11 @@ implements ActionListener, db_proc_iface, ListSelectionListener
 		//checkanswer.requestFocus();
 		this.requestFocusInWindow();
 		
+		/* Действия при закрытии окна */
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				SpecList.clearSelection();
+				specList.clearSelection();
 				setVisible(false);
 			}
 		});

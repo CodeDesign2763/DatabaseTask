@@ -33,22 +33,26 @@
  */
  
 import java.util.ArrayList;
-interface db_connection_iface
+interface DBConnectionIface
 {
-	/* Подключение к БД */
-	public connection_result connect(String na, String port, 
+	/* Функция проверяет настройки соединения и в случае,
+	 * если они корректны, сохраняет их для дальнейших 
+	 * подключений, проводимых в автоматическом режиме
+	 */
+	public ConnectionResult checkConnection(String na, String port, 
 	String user, String password, String dbname);
+	
 	/* Отключение от БД */
-	public connection_result disconnect();
-	/* Функция возвращающая результат запроса SQL в виде
-	 * экземпляра класса query_result, состоящего из 
-	 * флага успешности действия и списка String 
-	 * В качестве одного из аргументов поддерживает массив
-	 * атрибутов сущности (string[])*/
-	public query_result sql_function(String query,String[] atr);
-	/* Та же самая функция, но на вход подается только 1 атрибут */
-	public query_result sql_function_single(String query,String atr);
-	/* Функция для запросов, не требующих вывода типа CREATE и т.п.
-	 * Возвращает флаг успешности результата */
-	public boolean sql_procedure(String query);
+	public ConnectionResult disconnect();
+	
+	/* Взаимодействие с сущностью Speciality из БД */
+	public QueryResult getSpecialityByCode(String code);
+	public QueryResult getSpecialityCodeList();
+	public boolean addSpeciality(Speciality sp);
+	public boolean updateSpecialityByCode(String code, Speciality sp);
+	public boolean deleteSpecialityByCode(String code);
+	/* Взаимодействие с сущностью Subject */
+	public QueryResult getSubjectNameList();
+	public QueryResult getSubjectIDByName(String Name);
+	
 }

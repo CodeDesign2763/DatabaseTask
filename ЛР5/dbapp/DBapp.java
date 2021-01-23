@@ -2,7 +2,7 @@
  * Учебное задание по дисциплине БД
  * Программа для взаимодействия с БД из ЛР5
  * 
- * Класс dbpapp (основная программа)
+ * Класс DBapp (основная программа)
  * 
  * Версия 1
  * 
@@ -44,9 +44,8 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import java.awt.Color;
 
-class dbapp {
-	public static void main(String args[])
-	{
+class DBapp {
+	public static void main(String args[]) {
 		MainForm MainForm1 = new MainForm("Главное меню");
 		AuthForm AuthForm1 = new AuthForm("Авторизация");
 		AuthForm1.setMainFormPointer(MainForm1);

@@ -28,26 +28,27 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=2
+current_page=3
 FILE_NAME_0=275;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Ftestconnection.java;0;4
-FILE_NAME_1=1503;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2Fdbapp.java;0;4
-FILE_NAME_2=2769;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FMainForm.java;0;4
-FILE_NAME_3=2934;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FAuthForm.java;0;4
-FILE_NAME_4=3554;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FOlympiadForm.java;0;4
-FILE_NAME_5=1007;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2Fdb_connection_iface.java;0;4
-FILE_NAME_6=743;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2Fpgsql_db_connection.java;0;4
-FILE_NAME_7=345;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2Fquery_result.java;0;4
-FILE_NAME_8=8168;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FSpecialityForm.java;0;4
-FILE_NAME_9=425;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2Fdb_proc_iface.java;0;4
-FILE_NAME_10=63;PlantUML;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fclass_diag.plantuml;0;4
-FILE_NAME_11=4686;LaTeX;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2FChernokrylov_BD_Lab5.tex;0;4
+FILE_NAME_1=1559;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FDBapp.java;0;4
+FILE_NAME_2=2381;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FMainForm.java;0;4
+FILE_NAME_3=2632;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FAuthForm.java;0;4
+FILE_NAME_4=5842;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FOlympiadForm.java;0;4
+FILE_NAME_5=1781;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FDBConnectionIface.java;0;4
+FILE_NAME_6=3061;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FPGSQLDBConnection.java;0;4
+FILE_NAME_7=173;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FQueryResult.java;0;4
+FILE_NAME_8=271;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FSpecialityForm.java;0;4
+FILE_NAME_9=181;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FDBProcIface.java;0;4
+FILE_NAME_10=4686;LaTeX;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2FChernokrylov_BD_Lab5.tex;0;4
+FILE_NAME_11=0;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FConnectionResult.java;0;4
+FILE_NAME_12=314;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FSpeciality.java;0;4
 
 [build-menu]
 EX_00_LB=_Выполнить
-EX_00_CM=java  -cp psqldriver.jar:. dbapp
+EX_00_CM=java  -cp psqldriver.jar:. DBapp
 EX_00_WD=
 JavaFT_00_LB=_Скомпилировать
-JavaFT_00_CM=javac MainForm.java dbapp.java AuthForm.java SpecialityForm.java OlympiadForm.java db_connection_iface.java connection_result.java query_result.java db_proc_iface.java
+JavaFT_00_CM=javac MainForm.java DBapp.java AuthForm.java SpecialityForm.java DBConnectionIface.java ConnectionResult.java DBProcIface.java Speciality.java QueryResult.java PGSQLDBConnection.java
 JavaFT_00_WD=
 filetypes=Java;
 NF_00_LB=_Собрать

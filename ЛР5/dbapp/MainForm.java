@@ -28,10 +28,10 @@
  * 
  */
  
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+//import java.awt.event.ActionEvent;
+//import java.awt.event.ActionListener;
+//import java.awt.event.FocusEvent;
+//import java.awt.event.FocusListener;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -47,68 +47,66 @@ import java.awt.event.*;
 
 class MainForm extends JFrame implements ActionListener 
 {
-	private JLabel LInfo;
-	private JPanel centralpanel;
-	private JButton SpecButton;
-	private JButton OlympButton;
-	private JButton RatingButton;
-	private JButton OrderButton;
-	private db_connection_iface db_con;
+	/* Элементы графического интефейса */
+	private JLabel lInfo;
+	private JPanel centralPanel;
+	private JButton specButton;
+	private JButton olympButton;
+	private JButton ratingButton;
+	private JButton orderButton;
+	
+	/* Интерфейс для соединения с БД */
+	private DBConnectionIface dbCon;
 	
 	/* Вспомогательные формы */
-	private SpecialityForm SpecForm;
-	//private OlympiadForm OlympForm;
+	private SpecialityForm specForm;
+	//private OlympiadForm olympForm;
 	
-	
-	public void setDBcon(db_connection_iface dbc)
-	{
-		SpecForm=new SpecialityForm("Таблица Speciality",dbc);
+	public void setDBcon(DBConnectionIface dbc) {
+		specForm=new SpecialityForm("Таблица Speciality",dbc);
 		//OlympForm=new OlympiadForm("Таблица Olympiad",dbc);
-		db_con=dbc;
+		dbCon=dbc;
 	}
 	
 	@Override
-	public void actionPerformed(ActionEvent e)
-	{
-		if (e.getSource()==SpecButton) {
-			SpecForm.setVisible(true);
-			SpecForm.setDBcon(db_con);
-			SpecForm.reset();
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource()==specButton) {
+			specForm.setVisible(true);
+			specForm.setDBcon(dbCon);
+			specForm.reset();
 		}
 	}
 	
-	public MainForm(String title)
-	{
+	public MainForm(String title) {
 		/* Настройка графического интерфейса */
 		setTitle(title);
-		centralpanel=new JPanel(new GridLayout(5,1,10,10));
-		centralpanel.setBorder(
+		centralPanel=new JPanel(new GridLayout(5,1,10,10));
+		centralPanel.setBorder(
 		BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		LInfo=new JLabel("<html>ЛР №5 по дисциплине БД <br>"
+		lInfo=new JLabel("<html>ЛР №5 по дисциплине БД <br>"
 		+"Выполнил: студент группы ВТВ-467 <br>"
 		+"А. В. Чернокрылов <br>"
 		+"Проверил: к. т. н. <br>"
 		+"А. А. Соколов"
 		+"</html>");
-		centralpanel.add(LInfo);
-		SpecButton=new JButton("Таблица Speciality");
-		centralpanel.add(SpecButton);
-		OlympButton=new JButton("Таблица Olympiad");
-		centralpanel.add(OlympButton);
-		RatingButton=new JButton("Рейтинг абитуриентов");
-		centralpanel.add(RatingButton);
-		OrderButton=new JButton(
+		centralPanel.add(lInfo);
+		specButton=new JButton("Таблица Speciality");
+		centralPanel.add(specButton);
+		olympButton=new JButton("Таблица Olympiad");
+		centralPanel.add(olympButton);
+		ratingButton=new JButton("Рейтинг абитуриентов");
+		centralPanel.add(ratingButton);
+		orderButton=new JButton(
 		"Список лиц, рекомендованных к зачислению");
-		centralpanel.add(OrderButton);
-		add(centralpanel);
-		
-		/* Нажатие кнопок */
-		SpecButton.addActionListener(this);
-		
+		centralPanel.add(orderButton);
+		add(centralPanel);
 		/* Блокировка кнопок */
-		OlympButton.setEnabled(false);
-		RatingButton.setEnabled(false);
-		OrderButton.setEnabled(false);
+		olympButton.setEnabled(false);
+		ratingButton.setEnabled(false);
+		orderButton.setEnabled(false);
+		
+		/* Настройка обработчиков событий */
+		specButton.addActionListener(this);
 		
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		pack();
@@ -119,7 +117,7 @@ class MainForm extends JFrame implements ActionListener
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				db_con.disconnect();
+				dbCon.disconnect();
 				System.exit(0);
 			}
 		});
