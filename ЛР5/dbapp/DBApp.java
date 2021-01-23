@@ -44,7 +44,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import java.awt.Color;
 
-class DBapp {
+class DBApp {
 	public static void main(String args[]) {
 		MainForm MainForm1 = new MainForm("Главное меню");
 		AuthForm AuthForm1 = new AuthForm("Авторизация");
