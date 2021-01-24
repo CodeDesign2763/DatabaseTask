@@ -30,11 +30,11 @@ import java.util.ArrayList;
 class QueryResult{
 	private boolean res;
 	private ArrayList<String> ls;
-	Speciality spec;
+	private Speciality spec;
 	private String message;
 	
-	public QueryResult(boolean flag, ArrayList<String> list, Speciality pointer,String msg)
-	{
+	public QueryResult(boolean flag, ArrayList<String> list, 
+	Speciality pointer,String msg) {
 		ls=list;
 		res=flag;
 		spec=pointer;

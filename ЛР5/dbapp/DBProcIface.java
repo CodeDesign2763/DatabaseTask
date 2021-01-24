@@ -4,7 +4,7 @@
  * 
  * Интерфейс DBProcIface
  * 
- * Вспомогательный интерфейс для обработки данных
+ * Вспомогательный интерфейс для вывода данных
  * полученных от БД
  * 
  * Версия 1
@@ -36,17 +36,17 @@ import java.awt.*;
 import java.awt.event.*;
 
 interface DBProcIface {
+	/* Заполнить JList содержимым QueryResults */
 	public default void fillListWQueryResults(QueryResult qr, 
-	DefaultListModel<String> dlm)
-	{
+	DefaultListModel<String> dlm) {
 		dlm.clear();
 		for (String str : qr.getList()) {
 			dlm.addElement(str);
 		}
 	}
+	/* Заполнить JComboBox содержимым QueryResults */
 	public default void fillComboBoxWQueryResults(QueryResult qr, 
-	DefaultComboBoxModel<String> dcbm)
-	{
+	DefaultComboBoxModel<String> dcbm) {
 		dcbm.removeAllElements();
 		for (String str : qr.getList()) {
 			dcbm.addElement(str);

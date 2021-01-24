@@ -33,8 +33,7 @@
 class ConnectionResult {
 	private boolean result;
 	private String message;
-	public ConnectionResult(boolean r, String m)
-	{
+	public ConnectionResult(boolean r, String m) {
 		result=r;
 		message=m;
 	}

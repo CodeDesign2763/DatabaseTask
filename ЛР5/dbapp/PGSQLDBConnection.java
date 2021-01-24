@@ -56,8 +56,8 @@ class PGSQLDBConnection implements DBConnectionIface {
 	private String dbUrl;
 	
 	
-	public static final String DATABASE_USER = "user";
-	public static final String DATABASE_PASSWORD = "password";
+	private static final String DATABASE_USER = "user";
+	private static final String DATABASE_PASSWORD = "password";
 	
 	private void setConnectionProperties(String na, 
 	String port, String user, String pw, String dbName) {
@@ -234,8 +234,7 @@ class PGSQLDBConnection implements DBConnectionIface {
 		return f;
 	}
 	public boolean updateSpecialityByCode(String code, 
-	Speciality sp)
-	{
+	Speciality sp) {
 		boolean f=true;
 		/* Подключение к БД */
 		f=f && connectWithProps().getResult();
@@ -258,8 +257,7 @@ class PGSQLDBConnection implements DBConnectionIface {
 		return f;
 	}
 	
-	public boolean deleteSpecialityByCode(String code)
-	{
+	public boolean deleteSpecialityByCode(String code) {
 		boolean f=true;
 		/* Подключение к БД */
 		f=f && connectWithProps().getResult();

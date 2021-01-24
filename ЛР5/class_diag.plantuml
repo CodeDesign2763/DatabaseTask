@@ -1,6 +1,7 @@
 @startuml
 'left to right direction
 top to bottom direction
+skinparam linestyle ortho
 
 class AuthForm 
 note right: Окно авторизации
@@ -8,67 +9,96 @@ note right: Окно авторизации
 class MainForm 
 note right: Главное окно
 
-interface db_connection_iface{
-+  connection_result connect(String na, String port, 
-String user, String password, String dbname);
-+  connection_result disconnect();
-+  query_result sql_function(String query,String[] atr);
-+  query_result sql_function_single(String query,String atr);
-+  boolean sql_procedure(String query);
+interface DBConnectionIface{
++  checkConnection(String na, String port, String user,\n String password, String dbname) : ConnectionResult
++  disconnect() : ConnectionResult
++  getSpecialityByCode(String code) : QueryResult
++  getSpecialityCodeList() : QueryResult
++  addSpeciality(Speciality sp) : boolean
++  updateSpecialityByCode(String code, Speciality sp) : boolean
++  deleteSpecialityByCode(String code) : boolean
++  getSubjectNameList() : QueryResult
++  getSubjectIDByName(String Name) : QueryResult
 }
 class SpecialityForm
-class query_result{
-	- boolean res;
-	- ArrayList<String> ls;
-	+  query_result(boolean flag, ArrayList<String> list)
-	+  boolean get_result() 
-	+  ArrayList<String> get_list() 
-	+  String get_string()
+note left: Окно для работы\nс таблицей Speciality
+class QueryResult{
+- res : boolean
+- ls : ArrayList<String>
+- spec : Speciality 
+- message : String 
++ QueryResult(boolean flag, ArrayList<String> list,\n Speciality pointer,String msg)
++  getResult() : boolean
++ ArrayList<String> getList() 
++  getString() : String
++  getInt()  : int
++  getSpec() : Speciality
++  getMessage() : String
 }
-class pgsql_db_connection
+class PGSQLDBConnection{
+- connection : Connection
+- preparedStatement : PreparedStatement
+- resultset : ResultSet
+- connProperties : Properties
+- dbUrl : String
+- {static} DATABASE_USER = "user" : String 
+- {static} DATABASE_PASSWORD = "password" : String 
+- setConnectionProperties(String na, String port, String user,\n String pw, String dbName) : void
+- connectWithProps() : ConnectionResult
++ pgsql_db_connection() : void
++ checkConnection(String na, String port, String user,\n String password, String dbname) : ConnectionResult
+- connect(String na, String port, String user,\n String password, String dbname) : ConnectionResult
++ disconnect() : ConnectionResult
++  getSpecialityByCode(String code) : QueryResult
++ getSpecialityCodeList() : QueryResult
++ addSpeciality(Speciality sp) : boolean
++ updateSpecialityByCode(String code, Speciality sp) : boolean
++ deleteSpecialityByCode(String code) : boolean
++ getSubjectNameList() : QueryResult
++ getSubjectIDByName(String name) : QueryResult
+}
 class java.sql.Connection
-class java.sql.Statement
+class java.sql.PreparedStatement
 class java.sql.ResultSet
 
-class connection_result{
-	-  boolean result;
-	-  String message;
-	+ connection_result(boolean r, String m)
-	+ boolean get_result() 
-	+ String get_message()
+class ConnectionResult{
+- result : boolean
+- message : String
++ ConnectionResult(boolean r, String m)
++ getResult() : boolean
++ getMessage() : String
 }
 
-AuthForm ..> connection_result
-connection_result ..> db_connection_iface
+AuthForm ..> ConnectionResult
+ConnectionResult ..> DBConnectionIface
 
 class dbapp
 note right: Главная программа
 
-interface db_proc_iface
-note right: Инт. для пост-обр-и д-х
+interface DBProcIface{
++ fillListWQueryResults(QueryResult qr,\n DefaultListModel<String> dlm) : void <<default>>
++ fillComboBoxWQueryResults(QueryResult qr,\n DefaultComboBoxModel<String> dcbm) : void <<default>>
+}
+note right: Интерфейс для вывода\n данных из БД
 
 dbapp *-- AuthForm
 dbapp *-- MainForm
 
 AuthForm --> MainForm
-AuthForm o-- db_connection_iface
+AuthForm o-- DBConnectionIface
 
-MainForm o-- db_connection_iface
+MainForm o-- DBConnectionIface
 MainForm *-- SpecialityForm
 
-SpecialityForm o-- db_connection_iface
-SpecialityForm ..|> db_proc_iface
+SpecialityForm o-- DBConnectionIface
+SpecialityForm ..|> DBProcIface
 
-query_result ..> db_connection_iface
-query_result <..  db_proc_iface
+QueryResult ..> DBConnectionIface
+QueryResult <..  DBProcIface
 
-pgsql_db_connection ..|> db_connection_iface
-pgsql_db_connection *-- java.sql.Connection
-pgsql_db_connection *-- java.sql.Statement
-pgsql_db_connection *-- java.sql.ResultSet
-
-skinparam linestyle ortho
-
-
+PGSQLDBConnection ..|> DBConnectionIface
+PGSQLDBConnection *-- java.sql.Connection
+PGSQLDBConnection *-- java.sql.PreparedStatement
+PGSQLDBConnection *-- java.sql.ResultSet
 
 @enduml
