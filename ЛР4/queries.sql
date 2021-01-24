@@ -512,8 +512,6 @@ RETURNS TABLE (
 	cs bigint,
 	fs bigint,
 	ec boolean
-	
-	
 )
 AS $$
 SELECT 
@@ -567,7 +565,6 @@ RETURNS TABLE (
 	egeresult bigint
 )
 AS $$
-
 SELECT Q.*, 
 (SELECT sum(pe.score) AS score FROM enrollee AS enr2 
 JOIN passedege AS pe 
