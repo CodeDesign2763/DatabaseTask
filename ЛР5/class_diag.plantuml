@@ -21,7 +21,8 @@ interface DBConnectionIface{
 +  getSubjectIDByName(String Name) : QueryResult
 }
 class SpecialityForm
-note left: Окно для работы\nс таблицей Speciality
+note top: Окно для работы\nс таблицей Speciality
+
 class QueryResult{
 - res : boolean
 - ls : ArrayList<String>
@@ -69,10 +70,21 @@ class ConnectionResult{
 + getMessage() : String
 }
 
+class Speciality{
+- specialityCode : String
+- subjectVips : int
+- name : String
++ getSpecialityCode() : String
++ getSubjectVips() : int
++ getName() : String
++ Speciality(String sc, int sv, String n)
+}
+note right: Класс предметной области
+
 AuthForm ..> ConnectionResult
 ConnectionResult ..> DBConnectionIface
 
-class dbapp
+class DBApp
 note right: Главная программа
 
 interface DBProcIface{
@@ -100,5 +112,10 @@ PGSQLDBConnection ..|> DBConnectionIface
 PGSQLDBConnection *-- java.sql.Connection
 PGSQLDBConnection *-- java.sql.PreparedStatement
 PGSQLDBConnection *-- java.sql.ResultSet
+
+QueryResult *-- Speciality
+
+DBConnectionIface ..> Speciality
+Speciality ...> SpecialityForm
 
 @enduml

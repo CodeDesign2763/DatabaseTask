@@ -28,7 +28,7 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=0
+current_page=14
 FILE_NAME_0=2393;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2FTestConnection.java;0;4
 FILE_NAME_1=961;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FDBApp.java;0;4
 FILE_NAME_2=2381;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FMainForm.java;0;4
@@ -44,7 +44,6 @@ FILE_NAME_11=0;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2
 FILE_NAME_12=1076;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FSpeciality.java;0;4
 FILE_NAME_13=660;None;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2Freadme.txt;0;4
 FILE_NAME_14=105;None;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FManifest.txt;0;4
-FILE_NAME_15=1696;None;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2F.cache%2F.fr-KCjiTZ%2FMETA-INF%2FLICENSE;0;4
 
 [build-menu]
 EX_00_LB=_Выполнить
