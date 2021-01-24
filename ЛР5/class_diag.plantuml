@@ -93,8 +93,8 @@ interface DBProcIface{
 }
 note right: Интерфейс для вывода\n данных из БД
 
-dbapp *-- AuthForm
-dbapp *-- MainForm
+DBApp *-- AuthForm
+DBApp *-- MainForm
 
 AuthForm --> MainForm
 AuthForm o-- DBConnectionIface
