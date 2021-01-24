@@ -332,4 +332,32 @@ class PGSQLDBConnection implements DBConnectionIface {
 		/* Возврат значения */
 		return new QueryResult(f,list1,null,message);
 	}
+	
+	@Override
+	public QueryResult getSubjectNameByID(int id) {
+		ArrayList<String> list1= new ArrayList<String>();
+		boolean f=true;
+		String message="";
+		/* Подключение к БД */
+		f=f && connectWithProps().getResult();
+		/* Выполнение запроса и обработка данных */
+		try {
+			preparedStatement=connection.prepareStatement(
+			"SELECT name FROM subject WHERE id=?;");
+			preparedStatement.setInt(1, id);
+			resultset=preparedStatement.executeQuery();
+			while (resultset.next())
+			{
+				list1.add(resultset.getString("name"));
+			}
+		} catch (Exception e) {
+			f=false;
+			message=e.getMessage();
+		}
+		
+		/* Отключение от БД */
+		disconnect();
+		/* Возврат значения */
+		return new QueryResult(f,list1,null,message);
+	}
 }

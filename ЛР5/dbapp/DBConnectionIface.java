@@ -54,5 +54,6 @@ interface DBConnectionIface
 	/* Взаимодействие с сущностью Subject */
 	public QueryResult getSubjectNameList();
 	public QueryResult getSubjectIDByName(String Name);
+	public QueryResult getSubjectNameByID(int id);
 	
 }

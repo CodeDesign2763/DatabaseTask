@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Created-By: 11.0.6 (Debian)
+Main-Class: DBApp
+Class-Path: postgresql-42.2.18.jar
+

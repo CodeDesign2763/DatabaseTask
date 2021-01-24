@@ -83,15 +83,20 @@ implements ActionListener, DBProcIface, ListSelectionListener
 		if ((e.getSource()==specList) 
 		&& (specList.getSelectedValue()!=null))
 		{
-			qr=dbCon.getSpecialityByCode(specList.getSelectedValue().toString().trim());
+			qr=dbCon.getSpecialityByCode(
+			specList.getSelectedValue().toString().trim());
 			if (qr.getResult()) {
 				printMessage("Запись из Speciality получена успешно");
 				specCode.setText(qr.getSpec().getSpecialityCode());
 				specName.setText(qr.getSpec().getName());
-				subjList.setSelectedItem(String.valueOf(qr.getSpec().getSubjectVips()));
+				//printMessage(String.valueOf(qr.getSpec().getSubjectVips()));
+				subjList.setSelectedItem(
+				dbCon.getSubjectNameByID(
+				qr.getSpec().getSubjectVips()).getString());
 			}
 			else 
-				printMessage("Ошибка при получении записи из Speciality");
+				printMessage(
+				"Ошибка при получении записи из Speciality");
 
 			changeButton.setEnabled(true);
 			deleteButton.setEnabled(true);

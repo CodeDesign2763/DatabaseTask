@@ -28,24 +28,26 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=1
+current_page=7
 FILE_NAME_0=275;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Ftestconnection.java;0;4
-FILE_NAME_1=1513;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FDBApp.java;0;4
+FILE_NAME_1=961;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FDBApp.java;0;4
 FILE_NAME_2=2381;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FMainForm.java;0;4
 FILE_NAME_3=2152;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FAuthForm.java;0;4
 FILE_NAME_4=5842;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FOlympiadForm.java;0;4
-FILE_NAME_5=1781;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FDBConnectionIface.java;0;4
-FILE_NAME_6=4823;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FPGSQLDBConnection.java;0;4
+FILE_NAME_5=2328;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FDBConnectionIface.java;0;4
+FILE_NAME_6=10537;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FPGSQLDBConnection.java;0;4
 FILE_NAME_7=173;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FQueryResult.java;0;4
-FILE_NAME_8=271;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FSpecialityForm.java;0;4
+FILE_NAME_8=3138;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FSpecialityForm.java;0;4
 FILE_NAME_9=181;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FDBProcIface.java;0;4
 FILE_NAME_10=4686;LaTeX;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2FChernokrylov_BD_Lab5.tex;0;4
 FILE_NAME_11=0;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FConnectionResult.java;0;4
-FILE_NAME_12=314;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FSpeciality.java;0;4
+FILE_NAME_12=1076;Java;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FSpeciality.java;0;4
+FILE_NAME_13=660;None;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2Freadme.txt;0;4
+FILE_NAME_14=105;None;0;EUTF-8;1;1;0;%2Fhome%2Fuser1%2FРабочий%20стол%2FVSTU%2FБазы%20данных%2FЛР5%2Fdbapp%2FManifest.txt;0;4
 
 [build-menu]
 EX_00_LB=_Выполнить
-EX_00_CM=java  -cp psqldriver.jar:. DBApp
+EX_00_CM=java  -cp postgresql-42.2.18.jar:. DBApp
 EX_00_WD=
 JavaFT_00_LB=_Скомпилировать
 JavaFT_00_CM=javac MainForm.java DBApp.java AuthForm.java SpecialityForm.java DBConnectionIface.java ConnectionResult.java DBProcIface.java Speciality.java QueryResult.java PGSQLDBConnection.java
@@ -55,5 +57,5 @@ NF_00_LB=_Собрать
 NF_00_CM=
 NF_00_WD=
 NF_03_LB=Создать JAR
-NF_03_CM=jar cfe dbapp.jar dbapp *class
+NF_03_CM=jar cfm DBApp.jar Manifest.txt *class readme.txt
 NF_03_WD=
