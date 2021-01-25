@@ -74,7 +74,8 @@ implements ActionListener, DBProcIface, ListSelectionListener
 	}
 	
 	public void valueChanged(ListSelectionEvent e) {
-		/* Обязательно нужно делать проверку getSelectedValue()!=null
+		/* Обязательно нужно делать проверку 
+		 * getSelectedValue()!=null
 		 * если в дальнейшем используется метод toString()
 		 * иначе может быть nullpointexception
 		 */
@@ -86,10 +87,10 @@ implements ActionListener, DBProcIface, ListSelectionListener
 			qr=dbCon.getSpecialityByCode(
 			specList.getSelectedValue().toString().trim());
 			if (qr.getResult()) {
-				printMessage("Запись из Speciality получена успешно");
+				printMessage(
+				"Запись из Speciality получена успешно");
 				specCode.setText(qr.getSpec().getSpecialityCode());
 				specName.setText(qr.getSpec().getName());
-				//printMessage(String.valueOf(qr.getSpec().getSubjectVips()));
 				subjList.setSelectedItem(
 				dbCon.getSubjectNameByID(
 				qr.getSpec().getSubjectVips()).getString());
@@ -192,18 +193,26 @@ implements ActionListener, DBProcIface, ListSelectionListener
 				 */
 				if (subjList.getSelectedItem()!=null) {
 					/* Определим id предмета ВИПС */
-					QueryResult qr1=dbCon.getSubjectIDByName(subjList.getSelectedItem().toString());
+					QueryResult qr1=dbCon.getSubjectIDByName(
+					subjList.getSelectedItem().toString());
 					if (qr1.getResult()) {
-						printMessage("ID предмета определен успешно");
-						if (dbCon.addSpeciality(new Speciality(specCode.getText(),qr1.getInt(),specName.getText())))
-							printMessage("Новая запись успешно добавлена");
+						printMessage(
+						"ID предмета определен успешно");
+						if (dbCon.addSpeciality(
+						new Speciality(specCode.getText(),
+						qr1.getInt(),specName.getText())))
+							printMessage(
+							"Новая запись успешно добавлена");
 						else
-							printMessage("Ошибка при добавлении новой записи");
+							printMessage(
+							"Ошибка при добавлении новой записи");
 					} else {
-						printMessage("Ошибка при определении ID предмета");
+						printMessage(
+						"Ошибка при определении ID предмета");
 					}
 				} else {
-					printMessage("Ошибка! Не выбран предмет ВИПС");
+					printMessage(
+					"Ошибка! Не выбран предмет ВИПС");
 				}
 			} 
 			
@@ -212,24 +221,34 @@ implements ActionListener, DBProcIface, ListSelectionListener
 				
 				if (subjList.getSelectedItem()!=null) {
 					/* Определим id предмета ВИПС */
-					QueryResult qr1=dbCon.getSubjectIDByName(subjList.getSelectedItem().toString());
+					QueryResult qr1=dbCon.getSubjectIDByName(
+					subjList.getSelectedItem().toString());
 					if (qr1.getResult()) {
-						printMessage("ID предмета определен успешно");
-						if (dbCon.updateSpecialityByCode(specList.getSelectedValue().toString(), new Speciality(specCode.getText(),qr1.getInt(),specName.getText())))
-							printMessage("Запись успешно отредактирована");
+						printMessage(
+						"ID предмета определен успешно");
+						if (dbCon.updateSpecialityByCode(
+						specList.getSelectedValue().toString(), 
+						new Speciality(specCode.getText(),
+						qr1.getInt(),specName.getText())))
+							printMessage(
+							"Запись успешно отредактирована");
 						else
-							printMessage("Ошибка при редактировании записи");
+							printMessage(
+							"Ошибка при редактировании записи");
 					} else {
-						printMessage("Ошибка при определении ID предмета");
+						printMessage(
+						"Ошибка при определении ID предмета");
 					}
 				} else {
-					printMessage("Ошибка! Не выбран предмет ВИПС");
+					printMessage(
+					"Ошибка! Не выбран предмет ВИПС");
 				}
 			}
 			
 			if (e.getActionCommand().equals("delete") 
 			&& (specList.getSelectedValue()!=null)) {
-				if (dbCon.deleteSpecialityByCode(specList.getSelectedValue().toString())) 
+				if (dbCon.deleteSpecialityByCode(
+				specList.getSelectedValue().toString())) 
 					printMessage("Запись удалена успешно");
 				else 
 					printMessage("Ошибка при удалении записи");

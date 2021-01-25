@@ -81,7 +81,9 @@ class AuthForm extends JFrame implements ActionListener {
 			 * для подключения И разрешить доступ 
 			 * к главному окну 
 			 */
-			if (dbCon.checkConnection(dbServerNAField.getText(),dbServerPField.getText(),userField.getText(),pw,"admission_office").getResult()) {
+			if (dbCon.checkConnection(dbServerNAField.getText(),
+			dbServerPField.getText(),userField.getText(),
+			pw,"admission_office").getResult()) {
 				nextButton.setEnabled(true);
 				connectButton.setEnabled(false);
 				output.setText(
